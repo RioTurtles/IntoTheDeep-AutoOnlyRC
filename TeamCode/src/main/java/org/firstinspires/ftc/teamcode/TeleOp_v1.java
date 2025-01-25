@@ -43,10 +43,17 @@ public class TeleOp_v1 extends LinearOpMode {
             lastGamepad.copy(gamepad);
             gamepad.copy(gamepad1);
 
-            direction_y = gamepad.left_stick_y;
-            direction_x = -gamepad.left_stick_x;
-            pivot = gamepad.right_stick_x * 0.8;
-            heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            if (stage == Stage.INTAKE_READY || stage == Stage.INTAKE_GRABBED || stage == Stage.SCORING_READY) {
+                direction_y = gamepad.left_stick_y * 0.8;
+                direction_x = -gamepad.left_stick_x * 0.8;
+                pivot = gamepad.right_stick_x * 0.64;
+                heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            } else {
+                direction_y = gamepad.left_stick_y;
+                direction_x = -gamepad.left_stick_x;
+                pivot = gamepad.right_stick_x * 0.8;
+                heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            }
 
             armPos = robot.arm.getCurrentPosition();
             gripperPos = robot.gripper.getPosition();
@@ -57,8 +64,9 @@ public class TeleOp_v1 extends LinearOpMode {
 
             switch (stage) {
                 case INIT:
+                    robot.setArmPos(5, 1.0);
                     if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                        robot.setArmPos(5, 0.3);
+                        robot.setArmPos(1, 1.0);
                         stage = Stage.INTAKE_READY;
                     }
                     break;
