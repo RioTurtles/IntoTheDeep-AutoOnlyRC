@@ -54,7 +54,7 @@ public class Project1Hardware {
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         gripper.setDirection(Servo.Direction.REVERSE);
         gripperYaw.setDirection(Servo.Direction.FORWARD);
@@ -101,19 +101,19 @@ public class Project1Hardware {
                 arm.setTargetPosition(0);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(660); //TODO: check position
+                arm.setTargetPosition(7000); //TODO: check position
                 break;
             case 2: //Lowered down
-                arm.setTargetPosition(720); //TODO: check position
+                arm.setTargetPosition(7250); //TODO: check position
                 break;
             case 3: //High chamber
-                arm.setTargetPosition(390); //TODO: check position
+                arm.setTargetPosition(3900); //TODO: check position
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(450); //TODO: check position
+                arm.setTargetPosition(4500); //TODO: check position
                 break;
             case 5: //A bit above reset position
-                arm.setTargetPosition(110); //TODO: check position
+                arm.setTargetPosition(350); //TODO: check position
                 break;
         }
         arm.setPower(armPower);

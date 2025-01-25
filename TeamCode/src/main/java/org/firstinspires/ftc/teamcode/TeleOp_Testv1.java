@@ -10,13 +10,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 @TeleOp
 public class TeleOp_Testv1 extends LinearOpMode {
     double direction_y, direction_x, pivot, heading;
-        Project1Hardware robot = new Project1Hardware(hardwareMap);
-        ElapsedTime timer1 = new ElapsedTime();
+    Project1Hardware robot = new Project1Hardware(hardwareMap);
+    ElapsedTime timer1 = new ElapsedTime();
 
-        @Override
-        public void runOpMode() throws InterruptedException {
-
-            MecanumDrive drivetrain = new MecanumDrive(robot);
+    @Override
+    public void runOpMode() throws InterruptedException {
+        MecanumDrive drivetrain = new MecanumDrive(robot);
 
         Gamepad gamepad = new Gamepad();
         robot.init(hardwareMap);
@@ -64,7 +63,7 @@ public class TeleOp_Testv1 extends LinearOpMode {
             if (gamepad.left_trigger > 0) {
                 robot.setArmPos(4, 1.0);
 
-                if (robot.arm.getCurrentPosition() <= 3900) {timer1.reset();}
+                if (robot.arm.getCurrentPosition() < 3900) {timer1.reset();}
 
                 if (timer1.milliseconds() > 300) {
                     robot.setArmPos(5,1.0);
@@ -73,6 +72,8 @@ public class TeleOp_Testv1 extends LinearOpMode {
             }
 
             drivetrain.remote(direction_y, direction_x, -pivot, heading);
+            telemetry.addData("arm", robot.arm.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
