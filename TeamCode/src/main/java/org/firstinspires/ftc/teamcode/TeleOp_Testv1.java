@@ -60,16 +60,6 @@ public class TeleOp_Testv1 extends LinearOpMode {
             if (gamepad.right_bumper) {
                 robot.setGripperPos(1);
             }
-            if (gamepad.left_trigger > 0) {
-                robot.setArmPos(4, 1.0);
-
-                if (robot.arm.getCurrentPosition() < 3900) {timer1.reset();}
-
-                if (timer1.milliseconds() > 300) {
-                    robot.setArmPos(5,1.0);
-                    robot.setGripperPos(0);
-                }
-            }
 
             drivetrain.remote(direction_y, direction_x, -pivot, heading);
             telemetry.addData("arm", robot.arm.getCurrentPosition());

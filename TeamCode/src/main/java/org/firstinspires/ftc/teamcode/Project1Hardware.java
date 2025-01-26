@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Project1Hardware {
 
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo gripper, gripperYaw;
+    Servo gripper;
     IMU imu;
     HardwareMap hwmap;
     public Project1Hardware(HardwareMap hardwareMap) {
@@ -28,7 +28,6 @@ public class Project1Hardware {
 
         arm = hardwareMap.get(DcMotor.class, "arm");
         gripper = hardwareMap.get(Servo.class, "gripper");
-        gripperYaw = hardwareMap.get(Servo.class, "gripperYaw");
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -57,11 +56,9 @@ public class Project1Hardware {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         gripper.setDirection(Servo.Direction.REVERSE);
-        gripperYaw.setDirection(Servo.Direction.FORWARD);
 
         arm.setPower(0);
         gripper.setPosition(0);
-        gripperYaw.setPosition(0.032);
 
         imu.initialize(
                 new IMU.Parameters(
@@ -84,33 +81,25 @@ public class Project1Hardware {
         }
     }
 
-    public void setGripperYaw(int gripperYawPos) {
-        switch (gripperYawPos) {
-            case 0: //Horizontal Position
-                gripperYaw.setPosition(0.032);
-                break;
-            case 1: //Vertical Position
-                gripperYaw.setPosition(0.352);
-                break;
-        }
-    }
-
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset position
                 arm.setTargetPosition(0);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(7000); //TODO: check position
+                arm.setTargetPosition(6615); //TODO: check position
                 break;
             case 2: //Lowered down
-                arm.setTargetPosition(7270); //TODO: check position
+                arm.setTargetPosition(7215); //TODO: check position
                 break;
             case 3: //High chamber
                 arm.setTargetPosition(3877); //TODO: check position
                 break;
             case 4: //Scoring high chamber
                 arm.setTargetPosition(4670); //TODO: check position
+                break;
+            case 5: //Near reset position
+                arm.setTargetPosition(350); //TODO: check position
                 break;
         }
         arm.setPower(armPower);

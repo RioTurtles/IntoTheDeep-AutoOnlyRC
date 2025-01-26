@@ -19,7 +19,6 @@ public class TeleOp_v1 extends LinearOpMode {
 
     Stage stage = Stage.INIT;
     int armUpDownPos = 0;
-    int gripperYaw = 0;
     double armPos, gripperPos;
     double direction_y, direction_x, pivot, heading;
     ElapsedTime timer1 = new ElapsedTime();
@@ -44,9 +43,9 @@ public class TeleOp_v1 extends LinearOpMode {
             gamepad.copy(gamepad1);
 
             if (stage == Stage.INTAKE_READY || stage == Stage.INTAKE_GRABBED || stage == Stage.SCORING_READY) {
-                direction_y = gamepad.left_stick_y * 0.8;
-                direction_x = -gamepad.left_stick_x * 0.8;
-                pivot = gamepad.right_stick_x * 0.64;
+                direction_y = gamepad.left_stick_y * 0.7;
+                direction_x = -gamepad.left_stick_x * 0.7;
+                pivot = gamepad.right_stick_x * 0.8;
                 heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             } else {
                 direction_y = gamepad.left_stick_y;
@@ -72,18 +71,6 @@ public class TeleOp_v1 extends LinearOpMode {
                     break;
                 case INTAKE_READY:
                     robot.setGripperPos(0);
-                    if (gamepad.left_bumper && !(lastGamepad.left_bumper)) {
-                        switch (gripperYaw) {
-                            case 0: //Horizontal pos
-                                robot.setGripperYaw(1);
-                                gripperYaw = 1;
-                                break;
-                            case 1: //Vertical pos
-                                robot.setGripperYaw(0);
-                                gripperYaw = 0;
-                                break;
-                        }
-                    }
                     if (gamepad.right_bumper && !(lastGamepad.right_bumper)) {
                         switch (armUpDownPos) {
                             case 0: //Above sub
@@ -109,18 +96,6 @@ public class TeleOp_v1 extends LinearOpMode {
                     if (timer1.milliseconds() > 300) { //TODO: CHECK MILLISECONDS
                         robot.setArmPos(1, 1.0);
                         armUpDownPos = 0;
-                        if (gamepad.left_bumper && !(lastGamepad.left_bumper)) {
-                            switch (gripperYaw) {
-                                case 0: //Horizontal pos
-                                    robot.setGripperYaw(1);
-                                    gripperYaw = 1;
-                                    break;
-                                case 1: //Vertical pos
-                                    robot.setGripperYaw(0);
-                                    gripperYaw = 0;
-                                    break;
-                            }
-                        }
                         if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
                             stage = Stage.SCORING_READY;
                         }
@@ -128,7 +103,7 @@ public class TeleOp_v1 extends LinearOpMode {
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
                         robot.setArmPos(2, 1.0);
 
-                        if (timer1.milliseconds() > 200) { //TODO: CHECK MILLISECONDS
+                        if (timer1.milliseconds() > 200) {
                             stage = Stage.INTAKE_READY;
                         }
                     }
@@ -144,13 +119,13 @@ public class TeleOp_v1 extends LinearOpMode {
                         stage = Stage.INTAKE_GRABBED;
                     }
                     break;
-                case HIGH_CHAMBER: //TODO: HIT BACK SPECIMEN FIX ASAP
+                case HIGH_CHAMBER:
                     if (robot.arm.getCurrentPosition() < 4500){timer1.reset();}
                     robot.setArmPos(4, 1.0);
-                    if (timer1.milliseconds() > 300) { //TODO: CHECK MILLISECONDS
+                    if (timer1.milliseconds() > 300) {
                         robot.setGripperPos(0);
                     }
-                    if (timer1.milliseconds() > 600) { //TODO: CHECK MILLISECONDS
+                    if (timer1.milliseconds() > 600) {
                         stage = Stage.INIT;
                     }
                     break;
@@ -158,7 +133,6 @@ public class TeleOp_v1 extends LinearOpMode {
 
             telemetry.addData("Stage", stage);
             telemetry.addData("armUpDownPos", armUpDownPos);
-            telemetry.addData("gripperYaw", gripperYaw);
             telemetry.addLine();
             telemetry.addData("armPos", armPos);
             telemetry.addData("gripperPos", gripperPos);
