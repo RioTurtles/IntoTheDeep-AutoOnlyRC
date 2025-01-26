@@ -16,7 +16,7 @@ public class MecanumDrive {
     double FRPower;
     double BLPower;
     double BRPower;
-    NoYaw_Project1Hardware robot;
+    Project1Hardware robot;
 
 
     public MecanumDrive(Project1Hardware robot) {
