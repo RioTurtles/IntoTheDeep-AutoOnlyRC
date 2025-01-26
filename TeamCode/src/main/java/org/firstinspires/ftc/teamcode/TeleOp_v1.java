@@ -14,7 +14,8 @@ public class TeleOp_v1 extends LinearOpMode {
         INTAKE_READY,
         INTAKE_GRABBED,
         SCORING_READY,
-        HIGH_CHAMBER
+        HIGH_CHAMBER,
+        DOING_SCORING
     }
 
     Stage stage = Stage.INIT;
@@ -42,9 +43,14 @@ public class TeleOp_v1 extends LinearOpMode {
             lastGamepad.copy(gamepad);
             gamepad.copy(gamepad1);
 
-            if (stage == Stage.INTAKE_READY || stage == Stage.INTAKE_GRABBED || stage == Stage.SCORING_READY) {
-                direction_y = gamepad.left_stick_y * 0.7;
-                direction_x = -gamepad.left_stick_x * 0.7;
+            if (stage == Stage.INTAKE_READY) {
+                direction_y = gamepad.left_stick_y * 0.55;
+                direction_x = -gamepad.left_stick_x * 0.55;
+                pivot = gamepad.right_stick_x * 0.6;
+                heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            } else if (stage == Stage.INTAKE_GRABBED || stage == Stage.SCORING_READY) {
+                direction_y = gamepad.left_stick_y * 0.65;
+                direction_x = -gamepad.left_stick_x * 0.65;
                 pivot = gamepad.right_stick_x * 0.8;
                 heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             } else {
@@ -120,13 +126,25 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case HIGH_CHAMBER:
-                    if (robot.arm.getCurrentPosition() < 4500){timer1.reset();}
+                    if (robot.arm.getCurrentPosition() < 3915){timer1.reset();}
                     robot.setArmPos(4, 1.0);
                     if (timer1.milliseconds() > 300) {
+                        stage = Stage.DOING_SCORING;
+                    }
+                    break;
+                case DOING_SCORING:
+                    if (robot.arm.getCurrentPosition() < 4555){timer1.reset();}
+                    if (timer1.milliseconds() > 200) {
                         robot.setGripperPos(0);
                     }
-                    if (timer1.milliseconds() > 600) {
+                    if (timer1.milliseconds() > 300) {
+                        robot.setArmPos(6, 1.0);
+                    }
+                    if (timer1.milliseconds() > 700) {
                         stage = Stage.INIT;
+                    }
+                    if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
+                        stage = Stage.SCORING_READY;
                     }
                     break;
             }

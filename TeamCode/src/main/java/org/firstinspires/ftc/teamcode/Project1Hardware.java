@@ -87,19 +87,22 @@ public class Project1Hardware {
                 arm.setTargetPosition(0);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(6615); //TODO: check position
+                arm.setTargetPosition(6820); //TODO: check position
                 break;
             case 2: //Lowered down
-                arm.setTargetPosition(7215); //TODO: check position
+                arm.setTargetPosition(7335); //TODO: check position
                 break;
             case 3: //High chamber
-                arm.setTargetPosition(3877); //TODO: check position
+                arm.setTargetPosition(3915); //TODO: check position
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(4670); //TODO: check position
+                arm.setTargetPosition(4555); //TODO: check position
                 break;
             case 5: //Near reset position
-                arm.setTargetPosition(350); //TODO: check position
+                arm.setTargetPosition(680); //TODO: check position
+                break;
+            case 6: //After release scoring
+                arm.setTargetPosition(4750); //TODO: check position
                 break;
         }
         arm.setPower(armPower);
