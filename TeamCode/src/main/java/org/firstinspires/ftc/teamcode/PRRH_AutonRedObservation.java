@@ -22,7 +22,7 @@ public class PRRH_AutonRedObservation extends LinearOpMode {
         roadrunner.setPIDCoefficients(Axis.Y, 0.3, 0, 0.0001);
         roadrunner.setPIDCoefficients(Axis.HEADING, 0.8, 0.0001, 1);
 
-        roadrunner.setPoseEstimate(-33.14, -62.99, 270.00);
+        roadrunner.setPoseEstimate(-33.14, -62.99, 270.00); //TODO: change starting position
 
         waitForStart();
 
