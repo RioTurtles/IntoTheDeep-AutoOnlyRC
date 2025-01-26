@@ -216,6 +216,7 @@ public class TeleOp_v1 extends LinearOpMode {
             }
 
             telemetry.addData("Stage", stage);
+            telemetry.addData("intakeStage", intakeStage);
             telemetry.addData("armUpDownPos", armUpDownPos);
             telemetry.addLine();
             telemetry.addData("armPos", armPos);
