@@ -13,7 +13,7 @@ public class AutonRedObservation extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Project1Hardware robot = new Project1Hardware(hardwareMap);
+        NoYaw_Project1Hardware robot = new NoYaw_Project1Hardware(hardwareMap);
         MecanumDrive drivetrain = new MecanumDrive(robot);
 
         robot.init(hardwareMap);

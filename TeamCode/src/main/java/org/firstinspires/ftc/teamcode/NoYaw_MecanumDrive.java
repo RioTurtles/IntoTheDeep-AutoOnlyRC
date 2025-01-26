@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class MecanumDrive {
+public class NoYaw_MecanumDrive {
     double max;
     double sin;
     double cos;
@@ -19,7 +19,7 @@ public class MecanumDrive {
     NoYaw_Project1Hardware robot;
 
 
-    public MecanumDrive(Project1Hardware robot) {
+    public NoYaw_MecanumDrive(NoYaw_Project1Hardware robot) {
         this.robot = robot;
     }
 

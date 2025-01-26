@@ -8,25 +8,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp
-public class TeleOp_v1 extends LinearOpMode {
+public class NoYaw_TeleOp_v1 extends LinearOpMode {
     public enum Stage {
         INIT,
-        SAMPLE_INTAKE_READY,
-        SAMPLE_GRABBED,
-        SAMPLE_PUTDOWN,
-        INTAKE_SPECIMEN,
-        SPECIMEN_GRABBED,
+        INTAKE_READY,
+        INTAKE_GRABBED,
         SCORING_READY,
         HIGH_CHAMBER,
         DOING_SCORING
     }
-    public enum IntakeStage {
-        SAMPLE,
-        SPECIMEN
-    }
 
     Stage stage = Stage.INIT;
-    IntakeStage intakeStage = IntakeStage.SAMPLE;
     int armUpDownPos = 0;
     double armPos, gripperPos;
     double direction_y, direction_x, pivot, heading;
@@ -35,8 +27,8 @@ public class TeleOp_v1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Project1Hardware robot = new Project1Hardware(hardwareMap);
-        MecanumDrive drivetrain = new MecanumDrive(robot);
+        NoYaw_Project1Hardware robot = new NoYaw_Project1Hardware(hardwareMap);
+        NoYaw_MecanumDrive drivetrain = new NoYaw_MecanumDrive(robot);
 
         Gamepad gamepad = new Gamepad();
         Gamepad lastGamepad = new Gamepad();
@@ -51,23 +43,12 @@ public class TeleOp_v1 extends LinearOpMode {
             lastGamepad.copy(gamepad);
             gamepad.copy(gamepad1);
 
-            if (gamepad.left_bumper && !(lastGamepad.left_bumper)) {
-                switch (intakeStage) {
-                    case SAMPLE:
-                        intakeStage = IntakeStage.SPECIMEN;
-                        break;
-                    case SPECIMEN:
-                        intakeStage = IntakeStage.SAMPLE;
-                        break;
-                }
-            }
-
-            if (stage == Stage.SAMPLE_INTAKE_READY) {
+            if (stage == Stage.INTAKE_READY) {
                 direction_y = gamepad.left_stick_y * 0.55;
                 direction_x = -gamepad.left_stick_x * 0.55;
                 pivot = gamepad.right_stick_x * 0.6;
                 heading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-            } else if (stage == Stage.SAMPLE_GRABBED || stage == Stage.SCORING_READY) {
+            } else if (stage == Stage.INTAKE_GRABBED || stage == Stage.SCORING_READY) {
                 direction_y = gamepad.left_stick_y * 0.65;
                 direction_x = -gamepad.left_stick_x * 0.65;
                 pivot = gamepad.right_stick_x * 0.8;
@@ -89,19 +70,12 @@ public class TeleOp_v1 extends LinearOpMode {
             switch (stage) {
                 case INIT:
                     robot.setArmPos(5, 1.0);
-                    robot.setGripperPos(0);
-                    robot.setGripperYaw(0);
                     if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                        if (intakeStage == IntakeStage.SAMPLE) {
-                            robot.setArmPos(1, 1.0);
-                            stage = Stage.SAMPLE_INTAKE_READY;
-                        }
-                        if (intakeStage == IntakeStage.SPECIMEN) {
-                            stage = Stage.INTAKE_SPECIMEN;
-                        }
+                        robot.setArmPos(1, 1.0);
+                        stage = Stage.INTAKE_READY;
                     }
                     break;
-                case SAMPLE_INTAKE_READY:
+                case INTAKE_READY:
                     robot.setGripperPos(0);
                     if (gamepad.right_bumper && !(lastGamepad.right_bumper)) {
                         switch (armUpDownPos) {
@@ -116,65 +90,28 @@ public class TeleOp_v1 extends LinearOpMode {
                         }
                     }
                     if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                        stage = Stage.SAMPLE_GRABBED;
+                        stage = Stage.INTAKE_GRABBED;
                     }
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
                         stage = Stage.INIT;
                     }
                     break;
-                case SAMPLE_GRABBED:
+                case INTAKE_GRABBED:
                     if (robot.gripper.getPosition() < 0.437) {timer1.reset();}
                     robot.setGripperPos(1);
-                    if (timer1.milliseconds() > 300) {
+                    if (timer1.milliseconds() > 300) { //TODO: CHECK MILLISECONDS
                         robot.setArmPos(1, 1.0);
                         armUpDownPos = 0;
                         if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                            stage = Stage.SAMPLE_PUTDOWN;
+                            stage = Stage.SCORING_READY;
                         }
                     }
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
                         robot.setArmPos(2, 1.0);
 
                         if (timer1.milliseconds() > 200) {
-                            stage = Stage.SAMPLE_INTAKE_READY;
+                            stage = Stage.INTAKE_READY;
                         }
-                    }
-                    break;
-                case SAMPLE_PUTDOWN:
-                    if (robot.gripper.getPosition() < 0.437) {timer1.reset();}
-                    robot.setArmPos(2, 1.0);
-                    if (timer1.milliseconds() > 200) {
-                        robot.setGripperPos(0);
-                    }
-                    if (timer1.milliseconds() > 300) {
-                        if (intakeStage == IntakeStage.SAMPLE) {
-                            intakeStage = IntakeStage.SPECIMEN;
-                        }
-                        stage = Stage.INIT;
-                    }
-                    break;
-                case INTAKE_SPECIMEN:
-                    robot.setArmPos(7, 1.0);
-                    if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                        stage = Stage.SPECIMEN_GRABBED;
-                    }
-                    if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
-                        robot.setGripperYaw(0);
-                        stage = Stage.INIT;
-                    }
-                    break;
-                case SPECIMEN_GRABBED:
-                    robot.setGripperPos(1);
-                    if (timer1.milliseconds() > 200) { //TODO: check milliseconds
-                        robot.setGripperYaw(1);
-                        if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                            stage = Stage.SCORING_READY;
-                        }
-                    }
-                    if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
-                        robot.setGripperYaw(0);
-                        robot.setGripperPos(0);
-                        stage = Stage.INTAKE_SPECIMEN;
                     }
                     break;
                 case SCORING_READY:
@@ -185,7 +122,7 @@ public class TeleOp_v1 extends LinearOpMode {
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
                         robot.setArmPos(2, 1.0);
                         armUpDownPos = 1;
-                        stage = Stage.SAMPLE_GRABBED;
+                        stage = Stage.INTAKE_GRABBED;
                     }
                     break;
                 case HIGH_CHAMBER:
@@ -204,9 +141,6 @@ public class TeleOp_v1 extends LinearOpMode {
                         robot.setArmPos(6, 1.0);
                     }
                     if (timer1.milliseconds() > 700) {
-                        if (intakeStage == IntakeStage.SPECIMEN) {
-                            intakeStage = IntakeStage.SAMPLE;
-                        }
                         stage = Stage.INIT;
                     }
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {

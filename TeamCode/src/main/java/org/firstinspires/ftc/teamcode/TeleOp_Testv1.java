@@ -10,11 +10,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 @TeleOp
 public class TeleOp_Testv1 extends LinearOpMode {
     double direction_y, direction_x, pivot, heading;
-    Project1Hardware robot = new Project1Hardware(hardwareMap);
     ElapsedTime timer1 = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        Project1Hardware robot = new Project1Hardware(hardwareMap);
         MecanumDrive drivetrain = new MecanumDrive(robot);
 
         Gamepad gamepad = new Gamepad();
