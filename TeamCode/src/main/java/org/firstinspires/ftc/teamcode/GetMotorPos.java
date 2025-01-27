@@ -25,6 +25,12 @@ public class GetMotorPos extends LinearOpMode {
             if (gamepad1.right_bumper) {
                 robot.setGripperPos(1);
             }
+            if (gamepad1.left_trigger > 0) {
+                robot.setGripperYaw(0);
+            }
+            if (gamepad1.right_trigger > 0) {
+                robot.setGripperYaw(1);
+            }
 
             telemetry.addData("armPos", armPos);
             telemetry.update();

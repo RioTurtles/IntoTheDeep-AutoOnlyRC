@@ -13,9 +13,11 @@ public class TeleOp_v1 extends LinearOpMode {
         INIT,
         SAMPLE_INTAKE_READY,
         SAMPLE_GRABBED,
+        SAMPLE_INIT_POS,
         SAMPLE_PUTDOWN,
         INTAKE_SPECIMEN,
         SPECIMEN_GRABBED,
+        SPECIMEN_RAISED,
         SCORING_READY,
         HIGH_CHAMBER,
         DOING_SCORING
@@ -123,30 +125,33 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case SAMPLE_GRABBED:
-                    if (robot.gripper.getPosition() < 0.437) {timer1.reset();}
+                    if (robot.gripper.getPosition() < 0.6) {timer1.reset();} //TODO SET POSITION
                     robot.setGripperPos(1);
-                    if (timer1.milliseconds() > 300) {
+                    if (timer1.milliseconds() > 200) {
                         robot.setArmPos(1, 1.0);
                         armUpDownPos = 0;
                         if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                            stage = Stage.SAMPLE_PUTDOWN;
+                            stage = Stage.SAMPLE_INIT_POS;
                         }
                     }
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
                         robot.setArmPos(2, 1.0);
 
-                        if (timer1.milliseconds() > 200) {
+                        if (timer1.milliseconds() > 300) {
                             stage = Stage.SAMPLE_INTAKE_READY;
                         }
                     }
                     break;
-                case SAMPLE_PUTDOWN:
-                    if (robot.gripper.getPosition() < 0.437) {timer1.reset();}
-                    robot.setArmPos(2, 1.0);
-                    if (timer1.milliseconds() > 200) {
-                        robot.setGripperPos(0);
+                case SAMPLE_INIT_POS:
+                    if (robot.arm.getCurrentPosition() > 370) {timer1.reset();} //TODO SET POSITION
+                    robot.setArmPos(9, 1.0);
+                    if (timer1.milliseconds() > 100) {
+                        stage = Stage.SAMPLE_PUTDOWN;
                     }
-                    if (timer1.milliseconds() > 300) {
+                    break;
+                case SAMPLE_PUTDOWN:
+                    if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
+                        robot.setGripperPos(0);
                         if (intakeStage == IntakeStage.SAMPLE) {
                             intakeStage = IntakeStage.SPECIMEN;
                         }
@@ -164,8 +169,16 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case SPECIMEN_GRABBED:
+                    if (robot.gripper.getPosition() < 0.6){timer1.reset();} //TODO SET POSITION
                     robot.setGripperPos(1);
                     if (timer1.milliseconds() > 200) { //TODO: check milliseconds
+                        stage = Stage.SPECIMEN_RAISED;
+                    }
+                    break;
+                case SPECIMEN_RAISED:
+                    if (robot.arm.getCurrentPosition() < 1725){timer1.reset();} //TODO SET POSITION
+                    robot.setArmPos(8, 1.0);
+                    if (timer1.milliseconds() > 200) {
                         robot.setGripperYaw(1);
                         if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
                             stage = Stage.SCORING_READY;
@@ -189,14 +202,14 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case HIGH_CHAMBER:
-                    if (robot.arm.getCurrentPosition() < 3915){timer1.reset();}
+                    if (robot.arm.getCurrentPosition() < 4480){timer1.reset();} //TODO SET POSITION
                     robot.setArmPos(4, 1.0);
                     if (timer1.milliseconds() > 300) {
                         stage = Stage.DOING_SCORING;
                     }
                     break;
                 case DOING_SCORING:
-                    if (robot.arm.getCurrentPosition() < 4555){timer1.reset();}
+                    if (robot.arm.getCurrentPosition() < 4480){timer1.reset();} //TODO SET POSITION
                     if (timer1.milliseconds() > 200) {
                         robot.setGripperPos(0);
                     }

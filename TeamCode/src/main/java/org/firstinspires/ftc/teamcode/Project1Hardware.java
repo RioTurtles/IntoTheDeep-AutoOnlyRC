@@ -13,6 +13,7 @@ public class Project1Hardware {
     Servo gripper, gripperYaw;
     IMU imu;
     HardwareMap hwmap;
+
     public Project1Hardware(HardwareMap hardwareMap) {
         hwmap = hardwareMap;
     }
@@ -60,8 +61,8 @@ public class Project1Hardware {
         gripperYaw.setDirection(Servo.Direction.FORWARD);
 
         arm.setPower(0);
-        gripper.setPosition(0);
-        gripperYaw.setPosition(0.032);
+        setGripperPos(0);
+        setGripperYaw(0);
 
         imu.initialize(
                 new IMU.Parameters(
@@ -79,7 +80,7 @@ public class Project1Hardware {
                 gripper.setPosition(0);
                 break;
             case 1: //Close claw
-                gripper.setPosition(0.6);
+                gripper.setPosition(0.6); //TODO: check position OLD: 0.437?
                 break;
         }
     }
@@ -87,10 +88,10 @@ public class Project1Hardware {
     public void setGripperYaw(int gripperYawPos) {
         switch (gripperYawPos) {
             case 0: //Sample Intake
-                gripperYaw.setPosition(0.032);
+                gripperYaw.setPosition(0);
                 break;
             case 1: //Specimen Intake
-                gripperYaw.setPosition(0.702); //TODO: check position
+                gripperYaw.setPosition(0.66); //TODO: check position
                 break;
         }
     }
@@ -101,25 +102,31 @@ public class Project1Hardware {
                 arm.setTargetPosition(0);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(6640); //TODO: check position
                 break;
             case 2: //Lowered down
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(7210); //TODO: check position
                 break;
             case 3: //High chamber
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(3880);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(4480);
                 break;
             case 5: //Near reset position
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(370); //TODO: check position
                 break;
             case 6: //After release scoring
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(4720);
                 break;
             case 7: //Intake Specimen
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(1130); //TODO: check position
+                break;
+            case 8: //Above Intake Specimen
+                arm.setTargetPosition(1740); //TODO: check position
+                break;
+            case 9: //Put down sample
+                arm.setTargetPosition(370); //TODO: check position
                 break;
         }
         arm.setPower(armPower);
