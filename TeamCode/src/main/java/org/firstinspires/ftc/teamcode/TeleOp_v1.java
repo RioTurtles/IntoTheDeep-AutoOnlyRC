@@ -176,9 +176,9 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case SPECIMEN_RAISED:
-                    if (robot.arm.getCurrentPosition() < 1725){timer1.reset();} //TODO SET POSITION
+                    if (robot.arm.getCurrentPosition() < 1740){timer1.reset();} //TODO SET POSITION
                     robot.setArmPos(8, 1.0);
-                    if (timer1.milliseconds() > 200) {
+                    if (timer1.milliseconds() > 100) {
                         robot.setGripperYaw(1);
                         if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
                             stage = Stage.SCORING_READY;
