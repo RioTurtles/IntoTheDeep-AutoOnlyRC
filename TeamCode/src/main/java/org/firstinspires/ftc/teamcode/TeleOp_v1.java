@@ -27,7 +27,7 @@ public class TeleOp_v1 extends LinearOpMode {
         SPECIMEN
     }
 
-    Stage stage = Stage.INIT;
+    Stage stage = Stage.INTAKE_SPECIMEN;
     IntakeStage intakeStage = IntakeStage.SAMPLE;
     int armUpDownPos = 0;
     double armPos, gripperPos;
@@ -43,6 +43,7 @@ public class TeleOp_v1 extends LinearOpMode {
         Gamepad gamepad = new Gamepad();
         Gamepad lastGamepad = new Gamepad();
         robot.init(hardwareMap);
+        robot.setGripperPos(1);
 
         waitForStart();
 
@@ -148,6 +149,13 @@ public class TeleOp_v1 extends LinearOpMode {
                     if (timer1.milliseconds() > 100) {
                         stage = Stage.SAMPLE_PUTDOWN;
                     }
+                    if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
+                        robot.setArmPos(2, 1.0);
+
+                        if (timer1.milliseconds() > 300) {
+                            stage = Stage.SAMPLE_INTAKE_READY;
+                        }
+                    }
                     break;
                 case SAMPLE_PUTDOWN:
                     if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
@@ -156,6 +164,13 @@ public class TeleOp_v1 extends LinearOpMode {
                             intakeStage = IntakeStage.SPECIMEN;
                         }
                         stage = Stage.INIT;
+                    }
+                    if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
+                        robot.setArmPos(2, 1.0);
+
+                        if (timer1.milliseconds() > 300) {
+                            stage = Stage.SAMPLE_INTAKE_READY;
+                        }
                     }
                     break;
                 case INTAKE_SPECIMEN:

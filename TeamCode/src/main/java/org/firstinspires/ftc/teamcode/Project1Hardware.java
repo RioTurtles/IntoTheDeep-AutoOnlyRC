@@ -74,6 +74,62 @@ public class Project1Hardware {
         );
     }
 
+    public void init2(HardwareMap hardwareMap) {
+
+        hwmap = hardwareMap;
+
+        frontLeft = hardwareMap.get(DcMotor.class, "motorFL");
+        frontRight = hardwareMap.get(DcMotor.class, "motorFR");
+        backLeft = hardwareMap.get(DcMotor.class, "motorBL");
+        backRight = hardwareMap.get(DcMotor.class, "motorBR");
+
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        gripper = hardwareMap.get(Servo.class, "gripper");
+        gripperYaw = hardwareMap.get(Servo.class, "gripperYaw");
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        gripper.setDirection(Servo.Direction.REVERSE);
+        gripperYaw.setDirection(Servo.Direction.FORWARD);
+
+        arm.setPower(0);
+        setGripperPos(0);
+        setGripperYaw(0);
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        )
+                )
+        );
+    }
+
     public void setGripperPos(int gripperPos) {
         switch (gripperPos) {
             case 0: //Open claw
