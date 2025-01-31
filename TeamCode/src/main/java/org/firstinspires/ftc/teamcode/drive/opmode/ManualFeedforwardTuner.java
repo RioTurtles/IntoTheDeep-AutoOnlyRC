@@ -100,7 +100,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
             switch (mode) {
                 case TUNING_MODE:
-                    if (gamepad1.y) {
+                    if (gamepad1.left_bumper) {
                         mode = Mode.DRIVER_MODE;
                     }
 
@@ -131,7 +131,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     telemetry.addData("error", motionState.getV() - currentVelo);
                     break;
                 case DRIVER_MODE:
-                    if (gamepad1.b) {
+                    if (gamepad1.right_bumper) {
                         mode = Mode.TUNING_MODE;
                         movingForwards = true;
                         activeProfile = generateProfile(movingForwards);
