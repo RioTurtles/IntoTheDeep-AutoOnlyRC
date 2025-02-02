@@ -9,6 +9,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp
 public class TeleOp_v1 extends LinearOpMode {
+
+    /**
+
+     CURRENTLY BROKEN, CANNOT USE PROPERLY
+
+     */
     public enum Stage {
         INIT,
         SAMPLE_INTAKE_READY,

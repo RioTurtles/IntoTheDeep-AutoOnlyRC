@@ -154,39 +154,64 @@ public class Project1Hardware {
 
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
-            case 0: //Reset position
+            case 0: //Reset or Intake Specimen position
                 arm.setTargetPosition(0);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(6640); //TODO: check position
+                arm.setTargetPosition(0); //TODO: check position
                 break;
-            case 2: //Lowered down
-                arm.setTargetPosition(7210); //TODO: check position
+            case 2: //submersible lowered down
+                arm.setTargetPosition(0); //TODO: check position
                 break;
-            case 3: //High chamber
-                arm.setTargetPosition(3880);
+            case 3: //Prepare score specimen or Vertical above
+                arm.setTargetPosition(0);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(4480);
+                arm.setTargetPosition(0);
                 break;
-            case 5: //Near reset position
-                arm.setTargetPosition(370); //TODO: check position
-                break;
-            case 6: //After release scoring
-                arm.setTargetPosition(4720);
-                break;
-            case 7: //Intake Specimen
-                arm.setTargetPosition(1130); //TODO: check position
-                break;
-            case 8: //Above Intake Specimen
-                arm.setTargetPosition(1740); //TODO: check position
-                break;
-            case 9: //Put down sample
-                arm.setTargetPosition(370); //TODO: check position
+            case 5: //After release scoring
+                arm.setTargetPosition(0);
                 break;
         }
         arm.setPower(armPower);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+
+//    public void setArmPos(int armPos, double armPower) { //Positions:
+//        switch (armPos) {
+//            case 0: //Reset position
+//                arm.setTargetPosition(0);
+//                break;
+//            case 1: //Above submersible
+//                arm.setTargetPosition(6640); //TODO: check position
+//                break;
+//            case 2: //Lowered down
+//                arm.setTargetPosition(7210); //TODO: check position
+//                break;
+//            case 3: //High chamber
+//                arm.setTargetPosition(3880);
+//                break;
+//            case 4: //Scoring high chamber
+//                arm.setTargetPosition(4480);
+//                break;
+//            case 5: //Near reset position
+//                arm.setTargetPosition(370); //TODO: check position
+//                break;
+//            case 6: //After release scoring
+//                arm.setTargetPosition(4720);
+//                break;
+//            case 7: //Intake Specimen
+//                arm.setTargetPosition(1130); //TODO: check position
+//                break;
+//            case 8: //Above Intake Specimen
+//                arm.setTargetPosition(1740); //TODO: check position
+//                break;
+//            case 9: //Put down sample
+//                arm.setTargetPosition(370); //TODO: check position
+//                break;
+//        }
+//        arm.setPower(armPower);
+//        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//    }
 
 }
