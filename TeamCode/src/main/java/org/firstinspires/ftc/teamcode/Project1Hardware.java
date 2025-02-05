@@ -158,10 +158,10 @@ public class Project1Hardware {
                 arm.setTargetPosition(0);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(5425); //TODO: check position
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(5960); //TODO: check position
                 break;
             case 3: //Prepare score specimen or Vertical above
                 arm.setTargetPosition(0); //TODO: check position
