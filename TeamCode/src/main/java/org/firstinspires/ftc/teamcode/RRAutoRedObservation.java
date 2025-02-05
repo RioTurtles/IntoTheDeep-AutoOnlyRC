@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
 public class RRAutoRedObservation extends LinearOpMode {
@@ -56,7 +57,7 @@ public class RRAutoRedObservation extends LinearOpMode {
                 })
                 .build();
 
-        Trajectory grabFirstSample = drive.trajectoryBuilder(initialMovement.end())
+        TrajectorySequence grabFirstSample = drive.trajectorySequenceBuilder(initialMovement.end())
                 .splineToConstantHeading(new Vector2d(25.00, -40.00), Math.toRadians(35.00))
                 .addTemporalMarker(0.35, 0.00, () -> {
                     robot.setArmPos(2, 1.0);
@@ -85,6 +86,10 @@ public class RRAutoRedObservation extends LinearOpMode {
                 .build();
 
         Trajectory parking = drive.trajectoryBuilder(releaseFirstSample.end())
+                .lineToSplineHeading(new Pose2d(57.00, -67.00, Math.toRadians(90.00)))
+                .addTemporalMarker(0.01, 0.00, () -> {
+                    robot.setArmPos(0, 1.0);
+                })
                 .build();
 
         waitForStart();
@@ -102,7 +107,7 @@ public class RRAutoRedObservation extends LinearOpMode {
                     }
                     break;
                 case GRAB_FIRST_SAMPLE:
-                    drive.followTrajectory(grabFirstSample);
+                    drive.followTrajectorySequence(grabFirstSample);
                     timer1.reset();
                     if (timer1.milliseconds() > 100) { //TODO: check milliseconds
                         movestep = Movestep.RELEASE_FIRST_SAMPLE;
