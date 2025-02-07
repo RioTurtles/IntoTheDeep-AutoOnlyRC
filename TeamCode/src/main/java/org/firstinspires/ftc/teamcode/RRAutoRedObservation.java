@@ -46,7 +46,7 @@ public class RRAutoRedObservation extends LinearOpMode {
                 .addTemporalMarker(0.20, 0.00, () -> {
                     robot.setGripperYaw(1);
                 })
-                .addTemporalMarker(0.98, 0.00, () -> {
+                .addTemporalMarker(0.99, 0.00, () -> {
                     robot.setArmPos(4, 1.0);
                     if (timer1.milliseconds() > 200) {
                         robot.setGripperPos(0);

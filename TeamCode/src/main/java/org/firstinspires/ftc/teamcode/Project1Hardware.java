@@ -164,13 +164,13 @@ public class Project1Hardware {
                 arm.setTargetPosition(5960); //TODO: check position
                 break;
             case 3: //Prepare score specimen or Vertical above
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(2750); //TODO: check position
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(3175); //TODO: check position
                 break;
             case 5: //After release scoring
-                arm.setTargetPosition(0); //TODO: check position
+                arm.setTargetPosition(3630); //TODO: check position
                 break;
         }
         arm.setPower(armPower);
