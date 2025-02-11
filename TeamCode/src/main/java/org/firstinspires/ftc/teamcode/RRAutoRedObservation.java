@@ -33,7 +33,7 @@ public class RRAutoRedObservation extends LinearOpMode {
         MecanumDrive drivetrain = new MecanumDrive(robot);
 
         robot.init(hardwareMap);
-        robot.setGripperPos(1);
+        robot.setClawPos(1);
 
         Pose2d startPose = new Pose2d(33.00, -63.00, Math.toRadians(90.00));
         drive.setPoseEstimate(startPose);
@@ -44,12 +44,12 @@ public class RRAutoRedObservation extends LinearOpMode {
                     robot.setArmPos(3, 1.0);
                 })
                 .addTemporalMarker(0.20, 0.00, () -> {
-                    robot.setGripperYaw(1);
+                    robot.setClawYaw(1);
                 })
                 .addTemporalMarker(0.99, 0.00, () -> {
                     robot.setArmPos(4, 1.0);
                     if (timer1.milliseconds() > 200) {
-                        robot.setGripperPos(0);
+                        robot.setClawPos(0);
                     }
                     if (timer1.milliseconds() > 300) {
                         robot.setArmPos(5, 1.0);
@@ -102,7 +102,7 @@ public class RRAutoRedObservation extends LinearOpMode {
                     drive.followTrajectory(initialMovement);
                     if (timer1.milliseconds() > 700) { //TODO: check milliseconds
                         robot.setArmPos(3, 1.0);
-                        robot.setGripperYaw(0);
+                        robot.setClawYaw(0);
                         movestep = Movestep.GRAB_FIRST_SAMPLE;
                     }
                     break;

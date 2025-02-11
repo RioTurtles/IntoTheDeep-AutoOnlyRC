@@ -56,10 +56,10 @@ public class TeleOp_Testv1 extends LinearOpMode {
                 robot.setArmPos(5, 1.0);
             }
             if (gamepad.left_bumper) {
-                robot.setGripperPos(0);
+                robot.setClawPos(0);
             }
             if (gamepad.right_bumper) {
-                robot.setGripperPos(1);
+                robot.setClawPos(1);
             }
 
             drivetrain.remote(direction_y, direction_x, -pivot, heading);

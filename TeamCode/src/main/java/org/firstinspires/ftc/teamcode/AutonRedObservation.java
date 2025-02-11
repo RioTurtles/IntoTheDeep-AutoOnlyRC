@@ -63,7 +63,7 @@ public class AutonRedObservation extends LinearOpMode {
         telemetry.addData("Status", "Initialised");
         telemetry.update();
         drive.setPoseEstimate(new Pose2d(-36, 63, Math.toRadians(270))); // TODO
-        robot.setGripperPos(1);
+        robot.setClawPos(1);
 
         waitForStart();
 
@@ -80,7 +80,7 @@ public class AutonRedObservation extends LinearOpMode {
             // Initial movement
             if (moveStep == 1) {
                 robot.setArmPos(2, 1.0);
-                robot.setGripperPos(1);
+                robot.setClawPos(1);
                 xTarget = -10; // TODO
                 yTarget = 30; // TODO
                 headingTarget = 270; // TODO
@@ -105,7 +105,7 @@ public class AutonRedObservation extends LinearOpMode {
 
                     timer1.reset();
                     if (timer1.milliseconds() > 100) { // TODO
-                        robot.setGripperPos(0);
+                        robot.setClawPos(0);
 
                         moveStep = 3;
                         timer1.reset();
@@ -131,7 +131,7 @@ public class AutonRedObservation extends LinearOpMode {
 
             // Grab 1st sample
             if (moveStep == 4) {
-                robot.setGripperPos(1);
+                robot.setClawPos(1);
 
                 if (timer1.milliseconds() > 400) { // TODO
                         moveStep = 5;
@@ -150,7 +150,7 @@ public class AutonRedObservation extends LinearOpMode {
                 if ((Math.abs(poseEstimate.getX() - xTarget) > 1) || (Math.abs(poseEstimate.getY() - yTarget) > 1)) {timer1.reset();}
 
                 if(timer1.milliseconds() > 300){ // TODO
-                    robot.setGripperPos(0);
+                    robot.setClawPos(0);
                     moveStep = 6;
 
                     timer1.reset();
@@ -167,7 +167,7 @@ public class AutonRedObservation extends LinearOpMode {
                 if ((Math.abs(poseEstimate.getX() - xTarget) > 1) || (Math.abs(poseEstimate.getY() - yTarget) > 1)) {timer1.reset();}
 
                 if(timer1.milliseconds() > 100) { // TODO
-                    robot.setGripperPos(1);
+                    robot.setClawPos(1);
 
                     moveStep = 7;
                     timer1.reset();
@@ -184,7 +184,7 @@ public class AutonRedObservation extends LinearOpMode {
                 if ((Math.abs(poseEstimate.getX() - xTarget) > 1) || (Math.abs(poseEstimate.getY() - yTarget) > 1)) {timer1.reset();}
 
                 if(timer1.milliseconds() > 300){ // TODO
-                    robot.setGripperPos(0);
+                    robot.setClawPos(0);
 
                     moveStep = 8;
                     timer1.reset();
@@ -201,7 +201,7 @@ public class AutonRedObservation extends LinearOpMode {
                 if ((Math.abs(poseEstimate.getX() - xTarget) > 1) || (Math.abs(poseEstimate.getY() - yTarget) > 1)) {timer1.reset();}
 
                 if(timer1.milliseconds() > 100) { // TODO
-                    robot.setGripperPos(1);
+                    robot.setClawPos(1);
 
                     moveStep = 9;
                     timer1.reset();
@@ -218,7 +218,7 @@ public class AutonRedObservation extends LinearOpMode {
                 if ((Math.abs(poseEstimate.getX() - xTarget) > 1) || (Math.abs(poseEstimate.getY() - yTarget) > 1)) {timer1.reset();}
 
                 if(timer1.milliseconds() > 300){ // TODO
-                    robot.setGripperPos(0);
+                    robot.setClawPos(0);
                     moveStep = 10;
 
                     timer1.reset();

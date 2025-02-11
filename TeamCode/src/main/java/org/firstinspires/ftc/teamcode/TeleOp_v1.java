@@ -49,7 +49,7 @@ public class TeleOp_v1 extends LinearOpMode {
         Gamepad gamepad = new Gamepad();
         Gamepad lastGamepad = new Gamepad();
         robot.init(hardwareMap);
-        robot.setGripperPos(1);
+        robot.setClawPos(1);
 
         waitForStart();
 
@@ -89,7 +89,7 @@ public class TeleOp_v1 extends LinearOpMode {
             }
 
             armPos = robot.arm.getCurrentPosition();
-            gripperPos = robot.gripper.getPosition();
+            gripperPos = robot.claw.getPosition();
 
             if (gamepad.touchpad) {
                 robot.imu.resetYaw();
@@ -98,8 +98,8 @@ public class TeleOp_v1 extends LinearOpMode {
             switch (stage) {
                 case INIT:
                     robot.setArmPos(5, 1.0);
-                    robot.setGripperPos(0);
-                    robot.setGripperYaw(0);
+                    robot.setClawPos(0);
+                    robot.setClawYaw(0);
                     if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
                         if (intakeStage == IntakeStage.SAMPLE) {
                             robot.setArmPos(1, 1.0);
@@ -111,7 +111,7 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case SAMPLE_INTAKE_READY:
-                    robot.setGripperPos(0);
+                    robot.setClawPos(0);
                     if (gamepad.right_bumper && !(lastGamepad.right_bumper)) {
                         switch (armUpDownPos) {
                             case 0: //Above sub
@@ -132,8 +132,8 @@ public class TeleOp_v1 extends LinearOpMode {
                     }
                     break;
                 case SAMPLE_GRABBED:
-                    if (robot.gripper.getPosition() < 0.6) {timer1.reset();} //TODO SET POSITION
-                    robot.setGripperPos(1);
+                    if (robot.claw.getPosition() < 0.6) {timer1.reset();} //TODO SET POSITION
+                    robot.setClawPos(1);
                     if (timer1.milliseconds() > 200) {
                         robot.setArmPos(1, 1.0);
                         armUpDownPos = 0;
@@ -165,7 +165,7 @@ public class TeleOp_v1 extends LinearOpMode {
                     break;
                 case SAMPLE_PUTDOWN:
                     if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
-                        robot.setGripperPos(0);
+                        robot.setClawPos(0);
                         if (intakeStage == IntakeStage.SAMPLE) {
                             intakeStage = IntakeStage.SPECIMEN;
                         }
@@ -185,13 +185,13 @@ public class TeleOp_v1 extends LinearOpMode {
                         stage = Stage.SPECIMEN_GRABBED;
                     }
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
-                        robot.setGripperYaw(0);
+                        robot.setClawYaw(0);
                         stage = Stage.INIT;
                     }
                     break;
                 case SPECIMEN_GRABBED:
-                    if (robot.gripper.getPosition() < 0.6){timer1.reset();} //TODO SET POSITION
-                    robot.setGripperPos(1);
+                    if (robot.claw.getPosition() < 0.6){timer1.reset();} //TODO SET POSITION
+                    robot.setClawPos(1);
                     if (timer1.milliseconds() > 200) { //TODO: check milliseconds
                         stage = Stage.SPECIMEN_RAISED;
                     }
@@ -200,14 +200,14 @@ public class TeleOp_v1 extends LinearOpMode {
                     if (robot.arm.getCurrentPosition() < 1740){timer1.reset();} //TODO SET POSITION
                     robot.setArmPos(8, 1.0);
                     if (timer1.milliseconds() > 100) {
-                        robot.setGripperYaw(1);
+                        robot.setClawYaw(1);
                         if (gamepad.left_trigger > 0 && !(lastGamepad.left_trigger > 0)) {
                             stage = Stage.SCORING_READY;
                         }
                     }
                     if (gamepad.right_trigger > 0 && !(lastGamepad.right_trigger > 0)) {
-                        robot.setGripperYaw(0);
-                        robot.setGripperPos(0);
+                        robot.setClawYaw(0);
+                        robot.setClawPos(0);
                         stage = Stage.INTAKE_SPECIMEN;
                     }
                     break;
@@ -232,7 +232,7 @@ public class TeleOp_v1 extends LinearOpMode {
                 case DOING_SCORING:
                     if (robot.arm.getCurrentPosition() < 4480){timer1.reset();} //TODO SET POSITION
                     if (timer1.milliseconds() > 200) {
-                        robot.setGripperPos(0);
+                        robot.setClawPos(0);
                     }
                     if (timer1.milliseconds() > 300) {
                         robot.setArmPos(6, 1.0);

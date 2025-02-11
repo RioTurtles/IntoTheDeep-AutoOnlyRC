@@ -29,7 +29,7 @@ public class PRRHAutonRedObservation extends LinearOpMode {
         Movestep movestep = Movestep.INITIAL_MOVEMENT;
 
         robot.init2(hardwareMap);
-        robot.setGripperPos(1);
+        robot.setClawPos(1);
 
         roadrunner.setPIDCoefficients(Axis.X, 0.5, 0, 0);
         roadrunner.setPIDCoefficients(Axis.Y, 0.5, 0, 0);
@@ -47,7 +47,7 @@ public class PRRHAutonRedObservation extends LinearOpMode {
                     roadrunner.setTarget(6.00, -29.00, 90.00);
                     robot.setArmPos(3, 1.0);
                     if (timer1.milliseconds() > 200) {
-                        robot.setGripperYaw(1);
+                        robot.setClawYaw(1);
                         movestep = Movestep.SCORE_SPECIMEN_READY;
                     }
                     break;
@@ -61,7 +61,7 @@ public class PRRHAutonRedObservation extends LinearOpMode {
                 case SCORING_SPECIMEN:
                     if (robot.arm.getCurrentPosition() < 4480){timer1.reset();}
                     if (timer1.milliseconds() > 200) {
-                        robot.setGripperPos(0);
+                        robot.setClawPos(0);
                     }
                     if (timer1.milliseconds() > 300) {
                         robot.setArmPos(6, 1.0);

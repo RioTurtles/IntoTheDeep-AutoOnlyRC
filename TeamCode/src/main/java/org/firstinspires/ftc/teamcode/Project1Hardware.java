@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Project1Hardware {
 
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo gripper, gripperYaw;
+    Servo claw, clawYaw;
     IMU imu;
     HardwareMap hwmap;
 
@@ -19,7 +19,6 @@ public class Project1Hardware {
     }
 
     public void init(HardwareMap hardwareMap) {
-
         hwmap = hardwareMap;
 
         frontLeft = hardwareMap.get(DcMotor.class, "motorFL");
@@ -28,8 +27,8 @@ public class Project1Hardware {
         backRight = hardwareMap.get(DcMotor.class, "motorBR");
 
         arm = hardwareMap.get(DcMotor.class, "arm");
-        gripper = hardwareMap.get(Servo.class, "gripper");
-        gripperYaw = hardwareMap.get(Servo.class, "gripperYaw");
+        claw = hardwareMap.get(Servo.class, "gripper");
+        clawYaw = hardwareMap.get(Servo.class, "gripperYaw");
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -57,12 +56,12 @@ public class Project1Hardware {
         arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        gripper.setDirection(Servo.Direction.REVERSE);
-        gripperYaw.setDirection(Servo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.REVERSE);
+        clawYaw.setDirection(Servo.Direction.FORWARD);
 
         arm.setPower(0);
-        setGripperPos(0);
-        setGripperYaw(0);
+        setClawPos(0);
+        setClawYaw(0);
 
         imu.initialize(
                 new IMU.Parameters(
@@ -84,8 +83,8 @@ public class Project1Hardware {
         backRight = hardwareMap.get(DcMotor.class, "motorBR");
 
         arm = hardwareMap.get(DcMotor.class, "arm");
-        gripper = hardwareMap.get(Servo.class, "gripper");
-        gripperYaw = hardwareMap.get(Servo.class, "gripperYaw");
+        claw = hardwareMap.get(Servo.class, "gripper");
+        clawYaw = hardwareMap.get(Servo.class, "gripperYaw");
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -113,12 +112,12 @@ public class Project1Hardware {
         arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        gripper.setDirection(Servo.Direction.REVERSE);
-        gripperYaw.setDirection(Servo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.REVERSE);
+        clawYaw.setDirection(Servo.Direction.FORWARD);
 
         arm.setPower(0);
-        setGripperPos(0);
-        setGripperYaw(0);
+        setClawPos(0);
+        setClawYaw(0);
 
         imu.initialize(
                 new IMU.Parameters(
@@ -130,24 +129,24 @@ public class Project1Hardware {
         );
     }
 
-    public void setGripperPos(int gripperPos) {
-        switch (gripperPos) {
+    public void setClawPos(int clawPos) {
+        switch (clawPos) {
             case 0: //Open claw
-                gripper.setPosition(0);
+                claw.setPosition(0);
                 break;
             case 1: //Close claw
-                gripper.setPosition(0.6); //TODO: check position OLD: 0.437?
+                claw.setPosition(0.6); //TODO: check position OLD: 0.437?
                 break;
         }
     }
 
-    public void setGripperYaw(int gripperYawPos) {
-        switch (gripperYawPos) {
+    public void setClawYaw(int clawYawPos) {
+        switch (clawYawPos) {
             case 0: //Sample Intake
-                gripperYaw.setPosition(0);
+                clawYaw.setPosition(0);
                 break;
             case 1: //Specimen Intake
-                gripperYaw.setPosition(0.66); //TODO: check position
+                clawYaw.setPosition(0.66); //TODO: check position
                 break;
         }
     }
