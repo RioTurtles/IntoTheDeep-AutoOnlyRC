@@ -14,6 +14,8 @@ public class Project1Hardware {
     IMU imu;
     HardwareMap hwmap;
 
+    boolean clawClosed;
+
     public Project1Hardware(HardwareMap hardwareMap) {
         hwmap = hardwareMap;
     }
@@ -129,17 +131,27 @@ public class Project1Hardware {
         );
     }
 
+    /**
+     * Sets claw position.
+     * @param clawPos 0 - open; 1 - closed
+     */
     public void setClawPos(int clawPos) {
         switch (clawPos) {
             case 0: //Open claw
                 claw.setPosition(0);
+                clawClosed = false;
                 break;
             case 1: //Close claw
                 claw.setPosition(0.6); //TODO: check position OLD: 0.437?
+                clawClosed = true;
                 break;
         }
     }
 
+    /**
+     * Sets the yaw of the claw.
+     * @param clawYawPos 0 - sample intake; 1 - specimen intake
+     */
     public void setClawYaw(int clawYawPos) {
         switch (clawYawPos) {
             case 0: //Sample Intake
@@ -151,6 +163,17 @@ public class Project1Hardware {
         }
     }
 
+    /**
+     * Sets arm position.
+     * @param armPos Arm position.<br/>
+     *               0 - reset/intake<br/>
+     *               1 - above submersible<br/>
+     *               2 - submersible lowered down<br/>
+     *               3 - prepared to score specimen / vertically above<br/>
+     *               4 - scoring, high chamber<br/>
+     *               5 - release, after scoring
+     * @param armPower Arm power.
+     */
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset or Intake Specimen position
@@ -174,6 +197,10 @@ public class Project1Hardware {
         }
         arm.setPower(armPower);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public boolean armInPosition() {
+        return Math.abs(arm.getCurrentPosition() - arm.getTargetPosition()) <= 5;
     }
 
 //    public void setArmPos(int armPos, double armPower) { //Positions:
