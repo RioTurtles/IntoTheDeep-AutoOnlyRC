@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Project1Hardware {
 
-    DcMotor frontLeft, frontRight, backLeft, backRight, arm;
+    DcMotor frontLeft, frontRight, backLeft, backRight, arm, sliderL, sliderR;
     Servo claw, clawYaw;
     IMU imu;
     HardwareMap hwmap;
@@ -28,61 +28,8 @@ public class Project1Hardware {
         backLeft = hardwareMap.get(DcMotor.class, "motorBL");
         backRight = hardwareMap.get(DcMotor.class, "motorBR");
 
-        arm = hardwareMap.get(DcMotor.class, "arm");
-        claw = hardwareMap.get(Servo.class, "gripper");
-        clawYaw = hardwareMap.get(Servo.class, "gripperYaw");
-
-        imu = hardwareMap.get(IMU.class, "imu");
-
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
-
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-        claw.setDirection(Servo.Direction.REVERSE);
-        clawYaw.setDirection(Servo.Direction.FORWARD);
-
-        arm.setPower(0);
-        setClawPos(0);
-        setClawYaw(0);
-
-        imu.initialize(
-                new IMU.Parameters(
-                        new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                                RevHubOrientationOnRobot.UsbFacingDirection.UP
-                        )
-                )
-        );
-    }
-
-    public void init2(HardwareMap hardwareMap) {
-
-        hwmap = hardwareMap;
-
-        frontLeft = hardwareMap.get(DcMotor.class, "motorFL");
-        frontRight = hardwareMap.get(DcMotor.class, "motorFR");
-        backLeft = hardwareMap.get(DcMotor.class, "motorBL");
-        backRight = hardwareMap.get(DcMotor.class, "motorBR");
+        sliderL = hardwareMap.get(DcMotor.class, "sliderL");
+        sliderR = hardwareMap.get(DcMotor.class, "sliderR");
 
         arm = hardwareMap.get(DcMotor.class, "arm");
         claw = hardwareMap.get(Servo.class, "gripper");
@@ -95,6 +42,9 @@ public class Project1Hardware {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        sliderL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sliderR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -105,10 +55,16 @@ public class Project1Hardware {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
+        sliderL.setDirection(DcMotorSimple.Direction.REVERSE); //TODO: Check direction
+        sliderR.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: Check direction
+
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        sliderL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
+        sliderR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
@@ -116,6 +72,9 @@ public class Project1Hardware {
 
         claw.setDirection(Servo.Direction.REVERSE);
         clawYaw.setDirection(Servo.Direction.FORWARD);
+
+        sliderL.setPower(0);
+        sliderR.setPower(0);
 
         arm.setPower(0);
         setClawPos(0);
@@ -201,6 +160,26 @@ public class Project1Hardware {
 
     public boolean armInPosition() {
         return Math.abs(arm.getCurrentPosition() - arm.getTargetPosition()) <= 5;
+    }
+    public void lowerRidging(double ridgingPower) {
+        sliderL.setTargetPosition(0);
+        sliderR.setTargetPosition(0);
+
+        sliderL.setPower(ridgingPower);
+        sliderL.setPower(ridgingPower);
+
+        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void raiseRidging(double ridgingPower) {
+        sliderL.setTargetPosition(3350);
+        sliderR.setTargetPosition(3350);
+
+        sliderL.setPower(ridgingPower);
+        sliderL.setPower(ridgingPower);
+
+        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
 //    public void setArmPos(int armPos, double armPower) { //Positions:

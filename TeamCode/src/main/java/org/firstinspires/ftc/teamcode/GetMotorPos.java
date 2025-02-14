@@ -32,6 +32,8 @@ public class GetMotorPos extends LinearOpMode {
             }
 
             telemetry.addData("armPos", robot.arm.getCurrentPosition());
+            telemetry.addData("sliderLPos", robot.sliderL.getCurrentPosition());
+            telemetry.addData("sliderRPos", robot.sliderR.getCurrentPosition());
             telemetry.update();
         }
 

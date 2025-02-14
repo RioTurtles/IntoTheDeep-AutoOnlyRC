@@ -28,7 +28,7 @@ public class PRRHAutonRedObservation extends LinearOpMode {
         PartialRoadrunnerHelper roadrunner = new PartialRoadrunnerHelper(drive, drivetrain::remote);
         Movestep movestep = Movestep.INITIAL_MOVEMENT;
 
-        robot.init2(hardwareMap);
+        robot.init(hardwareMap);
         robot.setClawPos(1);
 
         roadrunner.setPIDCoefficients(Axis.X, 0.5, 0, 0);
