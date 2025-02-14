@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -41,14 +42,14 @@ public class RRAutoRedObservation extends LinearOpMode {
         drive.setPoseEstimate(startPose);
 
         Trajectory scoringSpecimen = drive.trajectoryBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(6.00, -29.00))
+                .lineToConstantHeading(new Vector2d(6.00, -40.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
                 .addTemporalMarker(0.00, 0.00, () -> {
                     robot.setArmPos(3, 1.0);
-                })
-                .addTemporalMarker(0.20, 0.00, () -> {
                     robot.setClawYaw(1);
                 })
-                .addTemporalMarker(0.96, 0.00, () -> {
+                .addTemporalMarker(0.8, 0.00, () -> {
                     robot.setArmPos(4, 1.0);
                     if (timer1.milliseconds() > 200) {
                         robot.setClawPos(0);
@@ -60,22 +61,38 @@ public class RRAutoRedObservation extends LinearOpMode {
                 .build();
 
         TrajectorySequence preparePush = drive.trajectorySequenceBuilder(scoringSpecimen.end())
-                .lineToConstantHeading(new Vector2d(25.00, -40.00))
-                .splineToConstantHeading(new Vector2d(49.00, -10.00), Math.toRadians(50.00))
+                .lineToConstantHeading(new Vector2d(25.00, -40.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
+                .splineToConstantHeading(new Vector2d(49.00, -10.00), Math.toRadians(50.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
                 .build();
 
         TrajectorySequence pushSamples = drive.trajectorySequenceBuilder(preparePush.end())
-                .lineToConstantHeading(new Vector2d(49.00, -55.00))
-                .splineToConstantHeading(new Vector2d(60.00, -10.00), Math.toRadians(40.00))
-                .lineToConstantHeading(new Vector2d(60.00, -55.00))
-                .splineToConstantHeading(new Vector2d(68.00, -10.00), Math.toRadians(40.00))
-                .lineToConstantHeading(new Vector2d(68.00, -55.00))
+                .lineToConstantHeading(new Vector2d(49.00, -55.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
+                .splineToConstantHeading(new Vector2d(60.00, -10.00), Math.toRadians(40.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
+                .lineToConstantHeading(new Vector2d(60.00, -55.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
+                .splineToConstantHeading(new Vector2d(68.00, -10.00), Math.toRadians(40.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
+                .lineToConstantHeading(new Vector2d(68.00, -55.00),
+                        SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(17))
                 .build();
 
         TrajectorySequence parking;
         try {
             parking = drive.trajectorySequenceBuilder(pushSamples.end())
-                    .lineToConstantHeading(new Vector2d(68.00, -55.00))
+                    .lineToConstantHeading(new Vector2d(68.00, -55.00),
+                            SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(17))
                     .build();
         } catch (EmptyPathSegmentException e) {
             parking = pushSamples;
