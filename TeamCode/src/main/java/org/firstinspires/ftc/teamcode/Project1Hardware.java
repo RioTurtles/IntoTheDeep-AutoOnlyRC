@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -9,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Project1Hardware {
 
-    DcMotor frontLeft, frontRight, backLeft, backRight, arm, sliderL, sliderR;
+    DcMotorEx frontLeft, frontRight, backLeft, backRight, arm, sliderL, sliderR;
     Servo claw, clawYaw;
     IMU imu;
     HardwareMap hwmap;
@@ -23,15 +24,15 @@ public class Project1Hardware {
     public void init(HardwareMap hardwareMap) {
         hwmap = hardwareMap;
 
-        frontLeft = hardwareMap.get(DcMotor.class, "motorFL");
-        frontRight = hardwareMap.get(DcMotor.class, "motorFR");
-        backLeft = hardwareMap.get(DcMotor.class, "motorBL");
-        backRight = hardwareMap.get(DcMotor.class, "motorBR");
+        frontLeft = hardwareMap.get(DcMotorEx.class, "motorFL");
+        frontRight = hardwareMap.get(DcMotorEx.class, "motorFR");
+        backLeft = hardwareMap.get(DcMotorEx.class, "motorBL");
+        backRight = hardwareMap.get(DcMotorEx.class, "motorBR");
 
-        sliderL = hardwareMap.get(DcMotor.class, "sliderL");
-        sliderR = hardwareMap.get(DcMotor.class, "sliderR");
+        sliderL = hardwareMap.get(DcMotorEx.class, "sliderL");
+        sliderR = hardwareMap.get(DcMotorEx.class, "sliderR");
 
-        arm = hardwareMap.get(DcMotor.class, "arm");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
         claw = hardwareMap.get(Servo.class, "gripper");
         clawYaw = hardwareMap.get(Servo.class, "gripperYaw");
 
@@ -131,27 +132,31 @@ public class Project1Hardware {
      *               3 - prepared to score specimen / vertically above<br/>
      *               4 - scoring, high chamber<br/>
      *               5 - release, after scoring
+     *               6 - above intake specimen
      * @param armPower Arm power.
      */
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset or Intake Specimen position
-                arm.setTargetPosition(0);
+                arm.setTargetPosition(205);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(5425); //TODO: check position
+                arm.setTargetPosition(5620);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(5960); //TODO: check position
+                arm.setTargetPosition(6193); //TODO: check position
                 break;
             case 3: //Prepare score specimen or Vertical above
-                arm.setTargetPosition(2750); //TODO: check position
+                arm.setTargetPosition(3265);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(3175); //TODO: check position
+                arm.setTargetPosition(3475);
                 break;
             case 5: //After release scoring
-                arm.setTargetPosition(3630); //TODO: check position
+                arm.setTargetPosition(3665);
+                break;
+            case 6: //After intake speciemen
+                arm.setTargetPosition(945);
                 break;
         }
         arm.setPower(armPower);

@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.sun.tools.javac.file.RelativePath;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Project1HardwareCustom.ArmPosition;
 
 
@@ -12,6 +15,9 @@ import org.firstinspires.ftc.teamcode.Project1HardwareCustom.ArmPosition;
 public class TeleoperatedV3 extends LinearOpMode {
     @Override
     public void runOpMode() {
+
+        double armBrakeCurrent = 3;
+
         Project1HardwareCustom robot = new Project1HardwareCustom(hardwareMap);
         State state = State.INIT;
         Gamepad gamepad = new Gamepad();
@@ -20,11 +26,17 @@ public class TeleoperatedV3 extends LinearOpMode {
         Gamepad lastOperator = new Gamepad();
 
         ElapsedTime timer1 = new ElapsedTime();
+        ElapsedTime armCurrentTimer = new ElapsedTime();
         boolean isSpecimen = false;
+
+        robot.clawClosed = false;
 
         waitForStart();
 
         while (opModeIsActive()) {
+
+            while (robot.arm.getCurrent(CurrentUnit.AMPS) < 3) {armCurrentTimer.reset();}
+
             lastGamepad.copy(gamepad); gamepad.copy(gamepad1);
             lastOperator.copy(operator); operator.copy(gamepad2);
 
@@ -32,6 +44,15 @@ public class TeleoperatedV3 extends LinearOpMode {
             boolean rb = gamepad.right_bumper && !lastGamepad.right_bumper;
             boolean lt = (gamepad.left_trigger > 0) && !(lastGamepad.left_trigger > 0);
             boolean rt = (gamepad.right_trigger > 0) && !(lastGamepad.right_trigger > 0);
+
+            if (gamepad.options && !(lastGamepad.options)) {
+                robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                robot.arm.setPower(-1.0);
+                if (armCurrentTimer.milliseconds() > 100) {
+                    robot.arm.setPower(0.0);
+                    robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                }
+            }
 
             if (state == State.INIT) {
                 if (rb) state = State.READY_SAMPLE;
@@ -112,6 +133,7 @@ public class TeleoperatedV3 extends LinearOpMode {
             if (gamepad.touchpad) robot.resetYaw();
             robot.remote(gamepad);
             telemetry.addData("State", state.value + " | " + state);
+            telemetry.addData("armCurrent", robot.arm.getCurrent(CurrentUnit.AMPS));
             telemetry.update();
 
             // but when you think tim mcgraw, i hope you think my favourite song

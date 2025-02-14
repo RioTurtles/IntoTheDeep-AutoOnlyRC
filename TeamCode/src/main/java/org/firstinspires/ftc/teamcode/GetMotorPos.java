@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp
 public class GetMotorPos extends LinearOpMode {
@@ -10,9 +14,12 @@ public class GetMotorPos extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
         Project1Hardware robot = new Project1Hardware(hardwareMap);
         MecanumDrive drivetrain = new MecanumDrive(robot);
         robot.init(hardwareMap);
+        robot.setClawPos(1);
 
         waitForStart();
 

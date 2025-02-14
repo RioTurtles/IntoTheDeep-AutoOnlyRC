@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.EmptyPathSegmentException;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -24,6 +28,8 @@ public class RRAutoRedObservation extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
         Project1Hardware robot = new Project1Hardware(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         MecanumDrive drivetrain = new MecanumDrive(robot);
@@ -31,7 +37,7 @@ public class RRAutoRedObservation extends LinearOpMode {
         robot.init(hardwareMap);
         robot.setClawPos(1);
 
-        Pose2d startPose = new Pose2d(33.00, -63.00, Math.toRadians(90.00));
+        Pose2d startPose = new Pose2d(9.00, -63.00, Math.toRadians(90.00));
         drive.setPoseEstimate(startPose);
 
         Trajectory scoringSpecimen = drive.trajectoryBuilder(startPose)
@@ -66,9 +72,14 @@ public class RRAutoRedObservation extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(68.00, -55.00))
                 .build();
 
-        TrajectorySequence parking = drive.trajectorySequenceBuilder(pushSamples.end())
-                .lineToConstantHeading(new Vector2d(68.00, -55.00))
-                .build();
+        TrajectorySequence parking;
+        try {
+            parking = drive.trajectorySequenceBuilder(pushSamples.end())
+                    .lineToConstantHeading(new Vector2d(68.00, -55.00))
+                    .build();
+        } catch (EmptyPathSegmentException e) {
+            parking = pushSamples;
+        }
 
         waitForStart();
 //        if (isStopRequested()) return;

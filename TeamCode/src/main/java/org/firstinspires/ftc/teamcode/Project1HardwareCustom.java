@@ -35,7 +35,7 @@ public class Project1HardwareCustom extends Project1Hardware {
     public void setArmPosition(ArmPosition position) {
         switch (position) {
             case INIT: setArmPos(0, 1); break;
-            case SPECIMEN_LIFT: setArmEncoder(100); break;
+            case SPECIMEN_LIFT: setArmPos(6, 1); break;
             case READY: setArmPos(1, 1); break;
             case INTAKE: setArmPos(2, 1); break;
             case SET: setArmPos(3, 1); break;
