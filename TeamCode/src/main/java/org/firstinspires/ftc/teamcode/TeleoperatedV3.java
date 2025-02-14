@@ -35,7 +35,7 @@ public class TeleoperatedV3 extends LinearOpMode {
 
             if (state == State.INIT) {
                 if (rb) state = State.READY_SAMPLE;
-            }
+            } else
 
             if (state == State.READY_SAMPLE) {
                 robot.setArmPosition(ArmPosition.READY);
@@ -43,9 +43,9 @@ public class TeleoperatedV3 extends LinearOpMode {
 
                 if (gamepad.square || operator.square) isSpecimen = false;
                 if (gamepad.circle || operator.circle) isSpecimen = true;
-                if (rb) {robot.clawOpen(); state = State.INTAKE_SAMPLE; continue;}
+                if (rb) {robot.clawOpen(); state = State.INTAKE_SAMPLE;}
                 if (isSpecimen) {robot.clawOpen(); state = State.READY_SPECIMEN;}
-            }
+            } else
 
             if (state == State.INTAKE_SAMPLE) {
                 robot.setArmPosition(ArmPosition.INTAKE);
@@ -54,7 +54,7 @@ public class TeleoperatedV3 extends LinearOpMode {
                 if (rt) {if (robot.clawClosed) robot.clawOpen(); else robot.clawClose();}
                 if (lb) {state = State.READY_SAMPLE;}
                 if (rb) {robot.clawClose(); state = State.READY_SAMPLE;}
-            }
+            } else
 
             if (state == State.READY_SPECIMEN) {
                 robot.setArmPosition(ArmPosition.INIT);
@@ -70,35 +70,39 @@ public class TeleoperatedV3 extends LinearOpMode {
                     continue;
                 }
 
+                if (rt) {if (robot.clawClosed) robot.clawOpen(); else robot.clawClose();}
+
                 if (!isSpecimen) state = State.READY_SAMPLE;
-            }
+            } else
 
             if (state == State.INTAKE_SPECIMEN) {
                 robot.setArmPosition(ArmPosition.SPECIMEN_LIFT);
 
+                if (rt) {if (robot.clawClosed) robot.clawOpen(); else robot.clawClose();}
                 if (lb) state = State.READY_SPECIMEN;
                 if (rb) state = State.SET;
-                continue;
-            }
+            } else
 
             if (state == State.SET) {
+                robot.clawClose();
                 robot.setArmPosition(ArmPosition.SET);
                 if (rb) state = State.SCORE_1;
                 if (lb) state = State.INTAKE_SPECIMEN;
-                continue;
-            }
+            } else
 
             if (state == State.SCORE_1) {
                 robot.setArmPosition(ArmPosition.SCORE);
 
-                if (robot.armInPosition()) {
+                if (robot.armInPosition() && !gamepad.left_bumper) {
                     robot.clawOpen();
                     state = State.SCORE_2;
                 }
 
+                if (lt) {if (robot.clawClosed) robot.clawOpen(); else robot.clawClose();}
+
                 if (lb) state = State.SET;
                 if (rb) {timer1.reset(); state = State.SCORE_2;}
-            }
+            } else
 
             if (state == State.SCORE_2) {
                 if (timer1.milliseconds() > 300) robot.setArmPosition(ArmPosition.CONFIRM);
@@ -113,13 +117,6 @@ public class TeleoperatedV3 extends LinearOpMode {
             robot.remote(gamepad);
             telemetry.addData("State", state.value + " | " + state);
             telemetry.update();
-
-            // but when you think tim mcgraw, i hope you think my favourite song
-            // the one we danced to all night long
-            // the moon like a spotlight on the lake
-            // when you think happiness, i hope you think that little black dress
-            // think of my head on your chest, and my old faded blue jeans
-            // and when you think tim mcgraw, i hope you think of me
         }
     }
 

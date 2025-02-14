@@ -11,6 +11,7 @@ public class Project1HardwareCustom extends Project1Hardware {
         super(hardwareMap);
         super.init(hardwareMap);
         remote = (new MecanumDrive(this))::remote;
+        clawClosed = false;
     }
 
     public void setArmEncoder(int value) {
