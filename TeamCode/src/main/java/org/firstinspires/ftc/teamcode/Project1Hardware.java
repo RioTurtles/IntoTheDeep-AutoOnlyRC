@@ -91,6 +91,75 @@ public class Project1Hardware {
         );
     }
 
+    public void initAuto(HardwareMap hardwareMap) {
+        hwmap = hardwareMap;
+
+        frontLeft = hardwareMap.get(DcMotorEx.class, "motorFL");
+        frontRight = hardwareMap.get(DcMotorEx.class, "motorFR");
+        backLeft = hardwareMap.get(DcMotorEx.class, "motorBL");
+        backRight = hardwareMap.get(DcMotorEx.class, "motorBR");
+
+        sliderL = hardwareMap.get(DcMotorEx.class, "sliderL");
+        sliderR = hardwareMap.get(DcMotorEx.class, "sliderR");
+
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
+        claw = hardwareMap.get(Servo.class, "gripper");
+        clawYaw = hardwareMap.get(Servo.class, "gripperYaw");
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        sliderL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sliderR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
+
+        sliderL.setDirection(DcMotorSimple.Direction.REVERSE); //TODO: Check direction
+        sliderR.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: Check direction
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        sliderL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
+        sliderR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
+
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        claw.setDirection(Servo.Direction.REVERSE);
+        clawYaw.setDirection(Servo.Direction.FORWARD);
+
+        sliderL.setPower(0);
+        sliderR.setPower(0);
+
+        arm.setPower(0);
+        setClawYaw(0);
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        )
+                )
+        );
+    }
+
     /**
      * Sets claw position.
      * @param clawPos 0 - open; 1 - closed
@@ -138,25 +207,25 @@ public class Project1Hardware {
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset or Intake Specimen position
-                arm.setTargetPosition(205);
+                arm.setTargetPosition(180);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(5620);
+                arm.setTargetPosition(5700);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(6193); //TODO: check position
+                arm.setTargetPosition(6325);
                 break;
             case 3: //Prepare score specimen or Vertical above
-                arm.setTargetPosition(3265);
+                arm.setTargetPosition(3260);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(3475);
+                arm.setTargetPosition(3440);
                 break;
             case 5: //After release scoring
-                arm.setTargetPosition(3665);
+                arm.setTargetPosition(3675);
                 break;
             case 6: //After intake speciemen
-                arm.setTargetPosition(945);
+                arm.setTargetPosition(1045);
                 break;
         }
         arm.setPower(armPower);

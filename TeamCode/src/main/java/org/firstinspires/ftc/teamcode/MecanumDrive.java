@@ -23,23 +23,23 @@ public class MecanumDrive {
         this.robot = robot;
     }
 
-    public void remote(double vertical, double horizontal, double pivot, double heading) {
+    public void remote(double vertical, double horizontal, double pivot, double heading){
         this.vertical = vertical;
         this.horizontal = horizontal;
         this.pivot = pivot;
-        this.heading = heading;
+        this.heading = heading ;
 
-        theta = 2 * Math.PI + Math.atan2(vertical, horizontal) - heading;
-        power = Math.hypot(horizontal, vertical);
+        theta = 2 * Math.PI + Math.atan2(vertical,horizontal) - heading;
+        power = Math.hypot(horizontal,vertical);
 
-        sin = Math.sin(theta - Math.PI / 4);
-        cos = Math.cos(theta - Math.PI / 4);
-        max = Math.max(Math.abs(sin), Math.abs(cos));
+        sin = Math.sin(theta -Math.PI/4);
+        cos = Math.cos(theta - Math.PI/4);
+        max = Math.max(Math.abs(sin),Math.abs(cos));
 
-        FLPower = power * (cos / max) + pivot;
-        FRPower = power * sin / max - pivot;
-        BLPower = power * -(sin / max) - pivot;
-        BRPower = power * -(cos / max) + pivot;
+        FLPower = power * (cos/max) + pivot;
+        FRPower = power * sin/max - pivot;
+        BLPower = power * -(sin/max) - pivot;
+        BRPower = power * -(cos/max) + pivot;
 
         robot.frontLeft.setPower(-FLPower);
         robot.frontRight.setPower(-FRPower);
