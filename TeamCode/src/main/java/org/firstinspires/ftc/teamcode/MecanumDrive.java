@@ -29,6 +29,7 @@ public class MecanumDrive {
         this.pivot = pivot;
         this.heading = heading ;
 
+
         theta = 2 * Math.PI + Math.atan2(vertical,horizontal) - heading;
         power = Math.hypot(horizontal,vertical);
 

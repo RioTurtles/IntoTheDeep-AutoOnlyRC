@@ -54,21 +54,22 @@ public class RRAutoRedObservation extends LinearOpMode {
                 })
                 .addTemporalMarker(1.00, 0.00, () -> {
                     robot.setArmPos(4, 1.0);
-                    if (timer1.milliseconds() > 800) {
+                    if (robot.arm.getCurrentPosition() >= 3745) {
                         robot.setClawPos(0);
+                        timer1.reset();
                     }
-                    if (timer1.milliseconds() > 1000) {
+                    if (timer1.milliseconds() > 100 && robot.arm.getCurrentPosition() >= 3745) {
                         robot.setArmPos(5, 1.0);
                     }
                 })
                 .build();
 
         Trajectory preparePush = drive.trajectoryBuilder(scoringSpecimen.end())
-                .lineToConstantHeading(new Vector2d(18.00, -45.00)
+                .lineToConstantHeading(new Vector2d(15.00, -45.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
-                .splineToConstantHeading(new Vector2d(34.00, -27.00), Math.toRadians(100.00)
+                .splineToConstantHeading(new Vector2d(35.00, -27.00), Math.toRadians(100.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
@@ -82,23 +83,23 @@ public class RRAutoRedObservation extends LinearOpMode {
                 .build();
 
         TrajectorySequence pushSamples = drive.trajectorySequenceBuilder(preparePush.end())
-                .lineToConstantHeading(new Vector2d(49.00, -55.00)
+                .lineToConstantHeading(new Vector2d(49.00, -52.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
-                .splineToConstantHeading(new Vector2d(60.00, -10.00), Math.toRadians(40.00)
+                .lineToConstantHeading(new Vector2d(56.00, -10.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
-                .lineToConstantHeading(new Vector2d(60.00, -55.00)
+                .lineToConstantHeading(new Vector2d(56.00, -52.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
-                .splineToConstantHeading(new Vector2d(68.00, -10.00), Math.toRadians(40.00)
+                .splineToConstantHeading(new Vector2d(64.00, -10.00), Math.toRadians(60.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
-                .lineToConstantHeading(new Vector2d(68.00, -55.00)
+                .lineToConstantHeading(new Vector2d(65.00, -52.00)
                         ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(17)
                 )
@@ -110,7 +111,7 @@ public class RRAutoRedObservation extends LinearOpMode {
         TrajectorySequence parking;
         try {
             parking = drive.trajectorySequenceBuilder(pushSamples.end())
-                    .lineToConstantHeading(new Vector2d(68.00, -55.00))
+                    .lineToConstantHeading(new Vector2d(65.00, -53.00))
                     .build();
         } catch (EmptyPathSegmentException e) {
             parking = pushSamples;
@@ -118,14 +119,9 @@ public class RRAutoRedObservation extends LinearOpMode {
 
         waitForStart();
         drive.setPoseEstimate(startPose);
-//        if (isStopRequested()) return;
+        if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-
-            if (movestep == Movestep.SCORING_SPECIMEN) {
-                if (robot.arm.getCurrentPosition() < 3440) {timer1.reset();} //TODO: SET POSITION
-            }
-
             switch (movestep) {
                 case SCORING_SPECIMEN:
                     drive.followTrajectory(scoringSpecimen);

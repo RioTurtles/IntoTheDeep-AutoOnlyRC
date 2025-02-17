@@ -84,8 +84,8 @@ public class Project1Hardware {
         imu.initialize(
                 new IMU.Parameters(
                         new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
                         )
                 )
         );
@@ -154,8 +154,8 @@ public class Project1Hardware {
         imu.initialize(
                 new IMU.Parameters(
                         new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
                         )
                 )
         );
@@ -208,7 +208,7 @@ public class Project1Hardware {
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset or Intake Specimen position
-                arm.setTargetPosition(180);
+                arm.setTargetPosition(50);
                 break;
             case 1: //Above submersible
                 arm.setTargetPosition(5700);
@@ -217,10 +217,10 @@ public class Project1Hardware {
                 arm.setTargetPosition(6325);
                 break;
             case 3: //Prepare score specimen or Vertical above
-                arm.setTargetPosition(3260);
+                arm.setTargetPosition(3325);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(3440);
+                arm.setTargetPosition(3547);
                 break;
             case 5: //After release scoring
                 arm.setTargetPosition(3675);
@@ -247,8 +247,8 @@ public class Project1Hardware {
         sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void raiseRidging(double ridgingPower) {
-        sliderL.setTargetPosition(3350);
-        sliderR.setTargetPosition(3350);
+        sliderL.setTargetPosition(3470);
+        sliderR.setTargetPosition(3470);
 
         sliderL.setPower(ridgingPower);
         sliderL.setPower(ridgingPower);

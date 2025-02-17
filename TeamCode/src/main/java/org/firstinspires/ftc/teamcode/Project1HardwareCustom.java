@@ -46,7 +46,7 @@ public class Project1HardwareCustom extends Project1Hardware {
     }
 
     public void remote(Gamepad gamepad) {
-        remote.call(gamepad.left_stick_y, -gamepad.left_stick_x, -gamepad.right_stick_x, getYaw());
+        remote.call(gamepad.left_stick_y, -gamepad.left_stick_x, -gamepad.right_stick_x, Math.toRadians(getYaw()));
     }
 
     public void setYawSample() {setClawYaw(0);}

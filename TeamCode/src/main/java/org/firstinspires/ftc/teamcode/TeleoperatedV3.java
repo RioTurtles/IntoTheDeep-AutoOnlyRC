@@ -40,6 +40,9 @@ public class TeleoperatedV3 extends LinearOpMode {
             boolean lt = (gamepad.left_trigger > 0) && !(lastGamepad.left_trigger > 0);
             boolean rt = (gamepad.right_trigger > 0) && !(lastGamepad.right_trigger > 0);
 
+            boolean dpadU = gamepad.dpad_up && !lastGamepad.dpad_up;
+            boolean dpadD = gamepad.dpad_down && !lastGamepad.dpad_down;
+
             /*if (gamepad.options && lastGamepad.options) {
                 robot.arm.setDirection(DcMotorSimple.Direction.REVERSE);
                 robot.arm.setPower(1.0);
@@ -75,15 +78,14 @@ public class TeleoperatedV3 extends LinearOpMode {
 
             if (state == State.READY_SPECIMEN) {
                 robot.setArmPosition(ArmPosition.INIT);
-                robot.setYawSpecimen();
+                robot.setYawSample();
 
                 if (gamepad.square || operator.square) isSpecimen = false;
                 if (gamepad.circle || operator.circle) isSpecimen = true;
 
                 if (rb) {
                     robot.clawClose();
-                    robot.setArmPosition(ArmPosition.SPECIMEN_LIFT);
-                    state = State.INTAKE_SPECIMEN;
+                    state = State.GRABBED_SPECIMEN;
                     continue;
                 }
 
@@ -92,16 +94,29 @@ public class TeleoperatedV3 extends LinearOpMode {
                 if (!isSpecimen) state = State.READY_SAMPLE;
             } else
 
+            if (state == State.GRABBED_SPECIMEN) {
+                robot.setArmPosition(ArmPosition.INIT);
+                if (rb) {
+                    state = State.INTAKE_SPECIMEN;
+                }
+                if (lb) {
+                    robot.clawOpen();
+                    state = State.READY_SPECIMEN;
+                }
+            } else
+
             if (state == State.INTAKE_SPECIMEN) {
+                robot.setYawSample();
                 robot.setArmPosition(ArmPosition.SPECIMEN_LIFT);
 
                 if (rt) {if (robot.clawClosed) robot.clawOpen(); else robot.clawClose();}
-                if (lb) state = State.READY_SPECIMEN;
+                if (lb) state = State.GRABBED_SPECIMEN;
                 if (rb) state = State.SET;
             } else
 
             if (state == State.SET) {
                 robot.clawClose();
+                robot.setYawSpecimen();
                 robot.setArmPosition(ArmPosition.SET);
                 if (rb) state = State.SCORE_1;
                 if (lb) state = State.INTAKE_SPECIMEN;
@@ -137,9 +152,13 @@ public class TeleoperatedV3 extends LinearOpMode {
                 state = State.INIT;
             }
 
+            if (dpadU && robot.arm.getCurrentPosition() >= 3000) { robot.raiseRidging(1.0); }
+            if (dpadD && robot.arm.getCurrentPosition() >= 3000) { robot.lowerRidging(1.0); }
+
             if (gamepad.touchpad) robot.resetYaw();
             robot.remote(gamepad);
             telemetry.addData("State", state.value + " | " + state);
+            telemetry.addData("Gyro",robot.getYaw());
             telemetry.update();
         }
     }
@@ -148,12 +167,13 @@ public class TeleoperatedV3 extends LinearOpMode {
         INIT(0),
         READY_SAMPLE(1),
         READY_SPECIMEN(2),
-        INTAKE_SAMPLE(3),
-        INTAKE_SPECIMEN(4),
-        SET(5),
-        SCORE_1(6),
-        SCORE_2(7),
-        FAILSAFE(8);
+        GRABBED_SPECIMEN(3),
+        INTAKE_SAMPLE(4),
+        INTAKE_SPECIMEN(5),
+        SET(6),
+        SCORE_1(7),
+        SCORE_2(8),
+        FAILSAFE(9);
 
         public final int value;
         State(int value) {this.value = value;}
