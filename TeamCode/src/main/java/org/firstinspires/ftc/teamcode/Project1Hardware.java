@@ -148,6 +148,7 @@ public class Project1Hardware {
         sliderR.setPower(0);
 
         arm.setPower(0);
+        setClawPos(1);
         setClawYaw(0);
 
         imu.initialize(
@@ -187,7 +188,7 @@ public class Project1Hardware {
                 clawYaw.setPosition(0);
                 break;
             case 1: //Specimen Intake
-                clawYaw.setPosition(0.66); //TODO: check position
+                clawYaw.setPosition(0.65); //TODO: check position
                 break;
         }
     }
