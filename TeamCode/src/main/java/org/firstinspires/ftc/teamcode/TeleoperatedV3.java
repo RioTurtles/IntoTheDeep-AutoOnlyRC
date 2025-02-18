@@ -43,15 +43,11 @@ public class TeleoperatedV3 extends LinearOpMode {
             boolean dpadU = gamepad.dpad_up && !lastGamepad.dpad_up;
             boolean dpadD = gamepad.dpad_down && !lastGamepad.dpad_down;
 
-            /*if (gamepad.options && lastGamepad.options) {
+            if (gamepad.options) {
                 robot.arm.setDirection(DcMotorSimple.Direction.REVERSE);
                 robot.arm.setPower(1.0);
-            } else {
-                robot.arm.setPower(0.0);
-                robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.arm.setDirection(DcMotorSimple.Direction.FORWARD);
                 state = State.FAILSAFE;
-            }*/
+            }
 
             if (state == State.INIT) {
                 if (rb) state = State.READY_SAMPLE;
