@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class RRAutoRedObservation extends LinearOpMode {
+public class RRAutoObservation_v2 extends LinearOpMode {
     public enum Movestep {
         INITIAL_MOVEMENT,
         SCORING_SPECIMEN,
@@ -23,13 +23,20 @@ public class RRAutoRedObservation extends LinearOpMode {
         PUSH_SAMPLES_1,
         PUSH_SAMPLES_2,
         PUSH_SAMPLES_3,
-        PARKING
+        PARKING,
+        END;
     }
     Movestep movestep = Movestep.INITIAL_MOVEMENT;
     ElapsedTime timer1 = new ElapsedTime();
+    TrajectorySequence pushSamples1, pushSamples2, pushSamples3, parking;
+
+    double maxVel, maxAccel;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        maxVel = 55;
+        maxAccel = 35;
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -43,11 +50,11 @@ public class RRAutoRedObservation extends LinearOpMode {
 
         Trajectory initialMovement = drive.trajectoryBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(2.00, -28.00)
-                        ,SampleMecanumDrive.getVelocityConstraint(45, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(30)
+                        ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                 )
                 .addTemporalMarker(0.00, 0.00, () -> {
-                    robot.setArmPos(3, 1.0);
+                    robot.setArmPos(6, 1.0);
                 })
                 .addTemporalMarker(0.20, 0.00, () -> {
                     robot.setClawYaw(1);
@@ -63,31 +70,25 @@ public class RRAutoRedObservation extends LinearOpMode {
 
         Trajectory preparePush = drive.trajectoryBuilder(initialMovement.end())
                 .lineToConstantHeading(new Vector2d(15.00, -45.00)
-                        ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(17)
+                        ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                 )
                 .addTemporalMarker(0.00, 0.00, () -> {
                     robot.setArmPos(0, 1.0);
                     robot.setClawYaw(0);
                 })
-                .splineToConstantHeading(new Vector2d(35.00, -27.00), Math.toRadians(100.00)
-                        ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(17)
+                .splineToConstantHeading(new Vector2d(36.00, -27.00), Math.toRadians(100.00)
+                        ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                 )
                 .splineToConstantHeading(new Vector2d(45.00, -10.00), Math.toRadians(40.00)
-                        ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(17)
+                        ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                 )
                 .addTemporalMarker(1.00, 0.00, () -> {
                     timer1.reset();
                 })
                 .build();
-
-        TrajectorySequence pushSamples1 = null;
-        TrajectorySequence pushSamples2 = null;
-        TrajectorySequence pushSamples3 = null;
-
-        TrajectorySequence parking = null;
 
         waitForStart();
         drive.setPoseEstimate(startPose);
@@ -102,39 +103,41 @@ public class RRAutoRedObservation extends LinearOpMode {
                     break;
                 case SCORING_SPECIMEN:
                     pushSamples1 = drive.trajectorySequenceBuilder(preparePush.end())
-                            .lineToConstantHeading(new Vector2d(49.00, -52.00)
-                                    ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(17)
+                            .lineToConstantHeading(new Vector2d(49.00, -56.00)
+                                    ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                             )
                             .addTemporalMarker(1.00, 0.00, () -> {
                                 timer1.reset();
                             })
                             .build();
+
                     robot.setArmPos(4, 1.0);
-                    if (robot.arm.getCurrentPosition() >= 3545) {
+                    if (robot.armInPosition()) {
                         robot.setClawPos(0);
-                        robot.setArmPos(5, 1.0);
-                        if (robot.arm.getCurrentPosition() >= 3670) {
+                        if (robot.arm.getCurrentPosition() >= 677) {
+                            robot.setArmPos(5, 1.0);
                             movestep = Movestep.PREPARE_PUSH;
                         }
                     }
                     break;
                 case PREPARE_PUSH:
-                    drive.followTrajectory(preparePush);
 
                     pushSamples2 = drive.trajectorySequenceBuilder(pushSamples1.end())
-                            .lineToConstantHeading(new Vector2d(56.00, -10.00)
-                                    ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(17)
+                            .splineToConstantHeading(new Vector2d(56.00, -10.00), Math.toRadians(40.00)
+                                    ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                             )
-                            .lineToConstantHeading(new Vector2d(56.00, -52.00)
-                                    ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(17)
+                            .lineToConstantHeading(new Vector2d(56.00, -56.00)
+                                    ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                             )
                             .addTemporalMarker(1.00, 0.00, () -> {
                                 timer1.reset();
                             })
                             .build();
+
+                    drive.followTrajectory(preparePush);
 
                     if (timer1.milliseconds() > 100) { //TODO: check milliseconds
                         movestep = Movestep.PUSH_SAMPLES_1;
@@ -143,8 +146,18 @@ public class RRAutoRedObservation extends LinearOpMode {
                 case PUSH_SAMPLES_1:
                     drive.followTrajectorySequence(pushSamples1);
 
-                    parking = drive.trajectorySequenceBuilder(pushSamples3.end())
-                            .lineToConstantHeading(new Vector2d(65.00, -53.00))
+                    pushSamples3 = drive.trajectorySequenceBuilder(pushSamples2.end())
+                            .splineToConstantHeading(new Vector2d(63.30, -10.00), Math.toRadians(60.00)
+                                    ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(maxAccel)
+                            )
+                            .lineToConstantHeading(new Vector2d(63.30, -56.00)
+                                    ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(maxAccel)
+                            )
+                            .addTemporalMarker(1.00, 0.00, () -> {
+                                timer1.reset();
+                            })
                             .build();
 
                     if (timer1.milliseconds() > 100) { //TODO: check milliseconds
@@ -154,20 +167,6 @@ public class RRAutoRedObservation extends LinearOpMode {
                 case PUSH_SAMPLES_2:
                     drive.followTrajectorySequence(pushSamples2);
 
-                    pushSamples3 = drive.trajectorySequenceBuilder(pushSamples2.end())
-                            .splineToConstantHeading(new Vector2d(64.00, -10.00), Math.toRadians(60.00)
-                                    ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(17)
-                            )
-                            .lineToConstantHeading(new Vector2d(65.00, -52.00)
-                                    ,SampleMecanumDrive.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(17)
-                            )
-                            .addTemporalMarker(1.00, 0.00, () -> {
-                                timer1.reset();
-                            })
-                            .build();
-
                     if (timer1.milliseconds() > 100) { //TODO: check milliseconds
                         movestep = Movestep.PUSH_SAMPLES_3;
                     }
@@ -175,13 +174,23 @@ public class RRAutoRedObservation extends LinearOpMode {
                 case PUSH_SAMPLES_3:
                     drive.followTrajectorySequence(pushSamples3);
 
+                    parking = drive.trajectorySequenceBuilder(pushSamples3.end())
+                            .lineToConstantHeading(new Vector2d(57, -58.00)
+                                    ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(maxAccel)
+                            )
+                            .build();
+
                     if (timer1.milliseconds() > 100) { //TODO: check milliseconds
                         movestep = Movestep.PARKING;
                     }
                     break;
                 case PARKING:
                     drive.followTrajectorySequence(parking);
-                    movestep = Movestep.PARKING;
+                    movestep = Movestep.END;
+                    break;
+                case END:
+                    movestep = Movestep.END;
                     break;
             }
 

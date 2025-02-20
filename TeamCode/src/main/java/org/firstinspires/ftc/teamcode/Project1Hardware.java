@@ -172,7 +172,7 @@ public class Project1Hardware {
                 clawClosed = false;
                 break;
             case 1: //Close claw
-                claw.setPosition(0.6); //TODO: check position OLD: 0.437?
+                claw.setPosition(0.4); //TODO: check position OLD: 0.437?
                 clawClosed = true;
                 break;
         }
@@ -203,30 +203,34 @@ public class Project1Hardware {
      *               4 - scoring, high chamber<br/>
      *               5 - release, after scoring
      *               6 - above intake specimen
+     *               7 - RESETTING CAR
      * @param armPower Arm power.
      */
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset or Intake Specimen position
-                arm.setTargetPosition(50);
+                arm.setTargetPosition(20);
                 break;
             case 1: //Above submersible
-                arm.setTargetPosition(5700);
+                arm.setTargetPosition(1075);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(6325);
+                arm.setTargetPosition(1191); //TODO: slight higher needed
                 break;
             case 3: //Prepare score specimen or Vertical above
-                arm.setTargetPosition(3325);
+                arm.setTargetPosition(650);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(3547);
+                arm.setTargetPosition(680);
                 break;
             case 5: //After release scoring
-                arm.setTargetPosition(3675);
+                arm.setTargetPosition(700);
                 break;
-            case 6: //After intake speciemen
-                arm.setTargetPosition(1045);
+            case 6: //After intake specimen
+                arm.setTargetPosition(180);
+                break;
+            case 7: //RESETTING CAR
+                arm.setTargetPosition(0);
                 break;
         }
         arm.setPower(armPower);
