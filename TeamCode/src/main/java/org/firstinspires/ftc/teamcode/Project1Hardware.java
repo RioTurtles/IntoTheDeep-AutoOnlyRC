@@ -43,8 +43,8 @@ public class Project1Hardware {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        sliderL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        sliderR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sliderL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        sliderR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -113,8 +113,8 @@ public class Project1Hardware {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        sliderL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        sliderR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sliderL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        sliderR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -134,8 +134,8 @@ public class Project1Hardware {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        sliderL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
-        sliderR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
+        sliderL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //TODO: Change to brake
+        sliderR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //TODO: Change to brake
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
@@ -172,7 +172,7 @@ public class Project1Hardware {
                 clawClosed = false;
                 break;
             case 1: //Close claw
-                claw.setPosition(0.4); //TODO: check position OLD: 0.437?
+                claw.setPosition(0.4);
                 clawClosed = true;
                 break;
         }
@@ -185,10 +185,10 @@ public class Project1Hardware {
     public void setClawYaw(int clawYawPos) {
         switch (clawYawPos) {
             case 0: //Sample Intake
-                clawYaw.setPosition(0);
+                clawYaw.setPosition(0.026);
                 break;
             case 1: //Specimen Intake
-                clawYaw.setPosition(0.65); //TODO: check position
+                clawYaw.setPosition(0.686);
                 break;
         }
     }
@@ -209,22 +209,22 @@ public class Project1Hardware {
     public void setArmPos(int armPos, double armPower) { //Positions:
         switch (armPos) {
             case 0: //Reset or Intake Specimen position
-                arm.setTargetPosition(20);
+                arm.setTargetPosition(30);
                 break;
             case 1: //Above submersible
                 arm.setTargetPosition(1075);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(1191); //TODO: slight higher needed
+                arm.setTargetPosition(1182); //TODO: adjustments
                 break;
             case 3: //Prepare score specimen or Vertical above
-                arm.setTargetPosition(650);
+                arm.setTargetPosition(655);
                 break;
             case 4: //Scoring high chamber
-                arm.setTargetPosition(680);
+                arm.setTargetPosition(683);
                 break;
             case 5: //After release scoring
-                arm.setTargetPosition(700);
+                arm.setTargetPosition(705);
                 break;
             case 6: //After intake specimen
                 arm.setTargetPosition(180);
@@ -232,6 +232,8 @@ public class Project1Hardware {
             case 7: //RESETTING CAR
                 arm.setTargetPosition(0);
                 break;
+            case 8: //Rigging position
+                arm.setTargetPosition(530);
         }
         arm.setPower(armPower);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -240,25 +242,17 @@ public class Project1Hardware {
     public boolean armInPosition() {
         return Math.abs(arm.getCurrentPosition() - arm.getTargetPosition()) <= 5;
     }
-    public void lowerRidging(double ridgingPower) {
-        sliderL.setTargetPosition(0);
-        sliderR.setTargetPosition(0);
-
-        sliderL.setPower(ridgingPower);
-        sliderL.setPower(ridgingPower);
-
-        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void lowerRidging() {
+        sliderL.setPower(-0.7);
+        sliderR.setPower(-0.7);
     }
-    public void raiseRidging(double ridgingPower) {
-        sliderL.setTargetPosition(3470);
-        sliderR.setTargetPosition(3470);
-
-        sliderL.setPower(ridgingPower);
-        sliderL.setPower(ridgingPower);
-
-        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sliderL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void raiseRidging() {
+        sliderL.setPower(0.7);
+        sliderR.setPower(0.7);
+    }
+    public void noRigging() {
+        sliderL.setPower(0);
+        sliderR.setPower(0);
     }
 
 //    public void setArmPos(int armPos, double armPower) { //Positions:

@@ -30,7 +30,9 @@ public class Project1HardwareCustom extends Project1Hardware {
         INTAKE,
         SET,
         SCORE,
-        CONFIRM
+        CONFIRM,
+        RESET,
+        RIGGING
     }
 
     public void setArmPosition(ArmPosition position) {
@@ -42,6 +44,8 @@ public class Project1HardwareCustom extends Project1Hardware {
             case SET: setArmPos(3, 1); break;
             case SCORE: setArmPos(4, 1); break;
             case CONFIRM: setArmPos(5, 1); break;
+            case RESET: setArmPos(7, 1); break;
+            case RIGGING: setArmPos(8, 1); break;
         }
     }
 

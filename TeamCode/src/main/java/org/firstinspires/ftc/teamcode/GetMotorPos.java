@@ -20,7 +20,7 @@ public class GetMotorPos extends LinearOpMode {
         MecanumDrive drivetrain = new MecanumDrive(robot);
         robot.init(hardwareMap);
         robot.setClawYaw(1);
-        robot.setClawPos(1);
+        robot.setClawPos(0);
 
         waitForStart();
 

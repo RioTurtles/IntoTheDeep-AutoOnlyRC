@@ -115,7 +115,7 @@ public class RRAutoObservation_v1 extends LinearOpMode {
                     robot.setArmPos(4, 1.0);
                     if (robot.armInPosition()) {
                         robot.setClawPos(0);
-                        if (robot.arm.getCurrentPosition() >= 677) {
+                        if (robot.arm.getCurrentPosition() >= 675) {
                             robot.setArmPos(5, 1.0);
                             movestep = Movestep.PREPARE_PUSH;
                         }
