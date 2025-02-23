@@ -39,8 +39,6 @@ public class TeleoperatedV3 extends LinearOpMode {
             boolean lt = (gamepad.left_trigger > 0) && !(lastGamepad.left_trigger > 0);
             boolean rt = (gamepad.right_trigger > 0) && !(lastGamepad.right_trigger > 0);
 
-            boolean triangle = (operator.triangle && !lastOperator.triangle);
-
             if (gamepad.options) {
                 robot.arm.setDirection(DcMotorSimple.Direction.REVERSE);
                 robot.arm.setPower(1.0);
@@ -183,20 +181,14 @@ public class TeleoperatedV3 extends LinearOpMode {
             } else
 
             if (state == State.FAILSAFE) {
-                robot.setClawPos(0);
-                robot.setClawYaw(0);
                 if (operator.dpad_up) {
-                    robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     robot.arm.setPower(1); //TODO
                 } else
                 if (operator.dpad_down) {
-                    robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     robot.arm.setPower(-1); //TODO
                 } else {
-                    robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     robot.arm.setPower(0);
                 }
-                if (operator.touchpad && !lastOperator.touchpad) {state = State.INIT;}
             } else
 
             if (state == State.RIGGING) {
@@ -208,11 +200,22 @@ public class TeleoperatedV3 extends LinearOpMode {
                 } else {
                     robot.noRigging();
                 }
-                if (triangle) {state = State.INIT;}
+                if (operator.triangle && !lastOperator.triangle) {state = State.INIT;}
             }
 
-            if (operator.touchpad && !lastOperator.touchpad) {state = State.FAILSAFE;}
-            if (triangle) {robot.setArmPosition(ArmPosition.RIGGING); state = State.RIGGING;}
+            if (operator.touchpad && !lastOperator.touchpad) {
+                if (state == state.FAILSAFE) {
+                    robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    state = State.INIT;
+                } else {
+                    robot.setClawPos(0);
+                    robot.setClawYaw(0);
+
+                    robot.arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    state = State.FAILSAFE;
+                }
+            }
+            if (operator.triangle && !lastOperator.triangle) {robot.setArmPosition(ArmPosition.RIGGING); state = State.RIGGING;}
 
             if (gamepad.touchpad) robot.resetYaw();
             robot.remote(gamepad);

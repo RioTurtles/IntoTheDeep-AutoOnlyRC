@@ -64,8 +64,12 @@ public class Project1Hardware {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        sliderL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
-        sliderR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //TODO: Change to brake
+        sliderL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE
+
+
+
+        ); //TODO: Change to brake
+        sliderR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //TODO: Change to brake
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setDirection(DcMotorSimple.Direction.FORWARD); //TODO: check direction
@@ -215,7 +219,7 @@ public class Project1Hardware {
                 arm.setTargetPosition(1075);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(1182); //TODO: adjustments
+                arm.setTargetPosition(1186); //TODO: adjustments
                 break;
             case 3: //Prepare score specimen or Vertical above
                 arm.setTargetPosition(655);

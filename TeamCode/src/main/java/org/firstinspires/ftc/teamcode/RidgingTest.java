@@ -32,10 +32,10 @@ public class RidgingTest extends LinearOpMode {
                 robot.imu.resetYaw();
             }
             if (gamepad.left_bumper) {
-                robot.lowerRidging(1.0);
+                robot.lowerRidging();
             }
             if (gamepad.right_bumper) {
-                robot.raiseRidging(1.0);
+                robot.raiseRidging();
             }
 
             telemetry.addData("arm", robot.arm.getCurrentPosition());
