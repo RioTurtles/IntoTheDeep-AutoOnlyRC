@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 public class Project1Hardware {
 
     DcMotorEx frontLeft, frontRight, backLeft, backRight, arm, sliderL, sliderR;
@@ -165,6 +167,8 @@ public class Project1Hardware {
         );
     }
 
+    public double getIMUYaw() {return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);}
+
     /**
      * Sets claw position.
      * @param clawPos 0 - open; 1 - closed
@@ -219,7 +223,7 @@ public class Project1Hardware {
                 arm.setTargetPosition(1075);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(1186); //TODO: adjustments
+                arm.setTargetPosition(1187); //TODO: adjustments
                 break;
             case 3: //Prepare score specimen or Vertical above
                 arm.setTargetPosition(655);

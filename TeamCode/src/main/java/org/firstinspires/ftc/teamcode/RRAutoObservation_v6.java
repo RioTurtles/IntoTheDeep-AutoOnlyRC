@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
-public class RRAutoObservation_v5 extends LinearOpMode { //TODO: write offset more + going to push can hit pillar
+public class RRAutoObservation_v6 extends LinearOpMode { //TODO: write offset more + going to push can hit pillar
     public enum Movestep {
         INITIAL_MOVEMENT,
         SCORING_SPECIMEN_INITIAL,
@@ -88,7 +88,7 @@ public class RRAutoObservation_v5 extends LinearOpMode { //TODO: write offset mo
                                     ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                             )
-                            .addTemporalMarker(0.00, 0.00, () -> {  //Todo
+                            .addTemporalMarker(0.10, 0.00, () -> {  //TODO: CHANGE SCALE
                                 robot.setArmPos(0, 1.0);
                                 robot.setClawYaw(0);
                             })
@@ -196,7 +196,7 @@ public class RRAutoObservation_v5 extends LinearOpMode { //TODO: write offset mo
                                         ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                         SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                                 )
-                                .addTemporalMarker(0.00, 0.00, () -> { //TOdo
+                                .addTemporalMarker(0.20, 0.00, () -> { //TOdo
                                     robot.setArmPos(0, 1.0);
                                     robot.setClawYaw(0);
                                 })
