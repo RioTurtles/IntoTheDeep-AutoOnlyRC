@@ -223,7 +223,7 @@ public class Project1Hardware {
                 arm.setTargetPosition(1075);
                 break;
             case 2: //submersible lowered down
-                arm.setTargetPosition(1187); //TODO: adjustments
+                arm.setTargetPosition(1188); //TODO: adjustments
                 break;
             case 3: //Prepare score specimen or Vertical above
                 arm.setTargetPosition(655);
@@ -251,12 +251,12 @@ public class Project1Hardware {
         return Math.abs(arm.getCurrentPosition() - arm.getTargetPosition()) <= 5;
     }
     public void lowerRidging() {
-        sliderL.setPower(-0.7);
-        sliderR.setPower(-0.7);
+        sliderL.setPower(-0.8);
+        sliderR.setPower(-0.8);
     }
     public void raiseRidging() {
-        sliderL.setPower(0.7);
-        sliderR.setPower(0.7);
+        sliderL.setPower(0.8);
+        sliderR.setPower(0.8);
     }
     public void noRigging() {
         sliderL.setPower(0);

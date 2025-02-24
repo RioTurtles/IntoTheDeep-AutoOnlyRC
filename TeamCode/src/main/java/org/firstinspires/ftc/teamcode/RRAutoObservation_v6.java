@@ -88,7 +88,7 @@ public class RRAutoObservation_v6 extends LinearOpMode { //TODO: write offset mo
                                     ,SampleMecanumDrive.getVelocityConstraint(maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(maxAccel)
                             )
-                            .addTemporalMarker(0.10, 0.00, () -> {  //TODO: CHANGE SCALE
+                            .addTemporalMarker(0.18, 0.00, () -> {  //TODO: CHANGE SCALE
                                 robot.setArmPos(0, 1.0);
                                 robot.setClawYaw(0);
                             })

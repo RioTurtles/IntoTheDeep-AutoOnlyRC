@@ -221,9 +221,9 @@ public class TeleoperatedV4 extends LinearOpMode {
             }
             if (operator.triangle && !lastOperator.triangle) {robot.setArmPosition(ArmPosition.RIGGING); state = State.RIGGING;}
 
-            if (operator.cross) autoAlignTarget = 0.00;  // Submersible alignment
+            if (operator.cross) autoAlignTarget = 0.0;  // Submersible alignment
             else if (operator.left_bumper) autoAlignTarget = 180.0;  // Specimen alignment
-            else if (operator.right_bumper) autoAlignTarget = 225.0;  // Observation alignment
+            else if (operator.right_bumper) autoAlignTarget = -135.0;  // Observation alignment
             else autoAlignTarget = null;
 
             if (Objects.nonNull(autoAlignTarget)) {
